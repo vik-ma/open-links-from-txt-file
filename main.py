@@ -1,3 +1,6 @@
+from re import L
+
+
 def read_file(target_file) -> list:
     """ Takes a .txt file, returns a formatted list for the script
 
@@ -39,15 +42,25 @@ def filter_by_phrase(l, p) -> list:
 
     return filtered_list
 
+def filter_by_lines(l, x, y) -> list:
+    list = l
+    start = x-1
+    end = y
+
+    return list[start:end]
 
 def print_test_file():
     test_txt_file = "test.txt"
     print_list(read_file(test_txt_file))
 
-
 def test_filter_phrase():
     list = filter_by_phrase(read_file("test.txt"), "asd")
     print(list)
 
-test_filter_phrase()
+def test_filter_by_lines():
+    list = filter_by_lines(read_file("test.txt"), 3, 8)
+    print(list)
+
+test_filter_by_lines()
+#test_filter_phrase()
 #print_test_file()
