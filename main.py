@@ -26,8 +26,28 @@ def print_list(list):
     for i in list:
         print(i)
 
+def filter_by_phrase(l, p) -> list:
+    phrase = p
+    list = l
+
+    filtered_list = []
+
+    for i in list:
+        if (len(i)==2):
+            if (phrase in i[1]):
+                filtered_list.append(i)
+
+    return filtered_list
+
+
 def print_test_file():
     test_txt_file = "test.txt"
     print_list(read_file(test_txt_file))
 
-print_test_file()
+
+def test_filter_phrase():
+    list = filter_by_phrase(read_file("test.txt"), "asd")
+    print(list)
+
+test_filter_phrase()
+#print_test_file()
