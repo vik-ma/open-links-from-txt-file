@@ -1,6 +1,3 @@
-from re import L
-
-
 def read_file(target_file) -> list:
     """ Takes a .txt file, returns a formatted list for the script
 
@@ -26,17 +23,11 @@ def read_file(target_file) -> list:
         
     return formatted_list
 
-def print_list(list):
-    for i in list:
-        print(i)
-
 def filter_by_phrase(l, p) -> list:
     phrase = p.lower()
-    list = l
-
     filtered_list = []
 
-    for i in list:
+    for i in l:
         if (len(i)==2):
             if (phrase in i[1]):
                 filtered_list.append(i)
@@ -45,11 +36,9 @@ def filter_by_phrase(l, p) -> list:
 
 def filter_by_domain(l, p) -> list:
     phrase = p.lower()
-    list = l
-
     filtered_list = []
 
-    for i in list:
+    for i in l:
         if (len(i)>0):
             if (phrase in i[0]):
                 filtered_list.append(i)
@@ -59,18 +48,21 @@ def filter_by_domain(l, p) -> list:
 
 
 def filter_by_lines(l, x, y) -> list:
-    list = l
     start = x-1
     end = y
 
-    return list[start:end]
+    return l[start:end]
+
+def print_list(list):
+    for i in list:
+        print(i)
 
 def print_test_file():
     test_txt_file = "test.txt"
     print_list(read_file(test_txt_file))
 
 def test_filter_phrase():
-    list = filter_by_phrase(read_file("test.txt"), "asd")
+    list = filter_by_phrase(read_file("test.txt"), "asdf")
     print(list)
 
 def test_filter_by_lines():
@@ -81,7 +73,9 @@ def test_filter_by_domain():
     list = filter_by_domain(read_file("test.txt"), "test")
     print(list)
 
+
+
 test_filter_by_domain()
-#test_filter_by_lines()
-#test_filter_phrase()
+test_filter_by_lines()
+test_filter_phrase()
 #print_test_file()
