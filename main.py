@@ -45,8 +45,6 @@ def filter_by_domain(l, p) -> list:
 
     return filtered_list
 
-
-
 def filter_by_lines(l, x, y) -> list:
     start = x-1
     end = y
@@ -75,7 +73,7 @@ def test_filter_by_domain():
 
 
 
-test_filter_by_domain()
-test_filter_by_lines()
-test_filter_phrase()
+#test_filter_by_domain()
+#test_filter_by_lines()
+#test_filter_phrase()
 #print_test_file()
