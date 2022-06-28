@@ -15,7 +15,12 @@ defaultdir = DESKTOP
 config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
 has_config = pathlib.Path("config.ini").exists()
 
-if not has_config:                                  #Creates default config.ini if it doesn't exist
+if has_config:
+    config.read("config.ini")
+    batch_warning = config.get("USERCONFIG", "batch_warning")
+    delay = config.get("USERCONFIG", "delay")
+    defaultdir = config.get("USERCONFIG", "defaultdir") 
+else:                                           #Creates default config.ini if it doesn't exist
     config.add_section("DEFAULT")
     config.add_section("USERCONFIG")
     config.add_section("BROWSER_PATHS")
@@ -27,11 +32,6 @@ if not has_config:                                  #Creates default config.ini 
     config.set("USERCONFIG", "defaultdir", str(DESKTOP))
     with open("config.ini", "w") as configfile:
         config.write(configfile)
-else:
-    config.read("config.ini")
-    batch_warning = config.get("USERCONFIG", "batch_warning")
-    delay = config.get("USERCONFIG", "delay")
-    defaultdir = config.get("USERCONFIG", "defaultdir")
 
 
 def add_browser_path():
