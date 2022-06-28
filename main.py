@@ -1,3 +1,40 @@
+import tkinter as tk
+from tkinter import filedialog, Text
+import pathlib
+import webbrowser
+import time
+import configparser
+from configparser import ConfigParser
+
+DESKTOP = pathlib.Path.home() / 'Desktop'
+
+batch_warning = 20
+delay = 0.25
+defaultdir = DESKTOP
+
+config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
+has_config = pathlib.Path("config.ini").exists()
+
+if not has_config:                                  #Creates default config.ini if it doesn't exist
+    config.add_section("DEFAULT")
+    config.add_section("USERCONFIG")
+    config.add_section("BROWSER_PATHS")
+    config.set("DEFAULT", "batch_warning", str(batch_warning))
+    config.set("DEFAULT", "delay", str(delay))
+    config.set("DEFAULT", "defaultdir", str(DESKTOP))
+    config.set("USERCONFIG", "batch_warning", str(batch_warning))
+    config.set("USERCONFIG", "delay", str(delay))
+    config.set("USERCONFIG", "defaultdir", str(DESKTOP))
+    with open("config.ini", "w") as configfile:
+        config.write(configfile)
+else:
+    config.read("config.ini")
+    batch_warning = config.get("USERCONFIG", "batch_warning")
+    delay = config.get("USERCONFIG", "delay")
+    defaultdir = config.get("USERCONFIG", "defaultdir")
+    print(str(defaultdir))
+
+
 def read_file(target_file) -> list:
     """ Takes a .txt file, returns a formatted list for the script
 
@@ -23,6 +60,7 @@ def read_file(target_file) -> list:
         
     return formatted_list
 
+
 def filter_by_phrase(l, p) -> list:
     phrase = p.lower()
     filtered_list = []
@@ -33,6 +71,7 @@ def filter_by_phrase(l, p) -> list:
                 filtered_list.append(i)
 
     return filtered_list
+
 
 def filter_by_domain(l, p) -> list:
     phrase = p.lower()
@@ -45,15 +84,17 @@ def filter_by_domain(l, p) -> list:
 
     return filtered_list
 
+
 def filter_by_lines(l, x, y) -> list:
     start = x-1
     end = y
-
     return l[start:end]
+
 
 def print_list(list):
     for i in list:
         print(i)
+
 
 def print_test_file():
     test_txt_file = "test.txt"
@@ -70,6 +111,7 @@ def test_filter_by_lines():
 def test_filter_by_domain():
     list = filter_by_domain(read_file("test.txt"), "test")
     print(list)
+
 
 
 
