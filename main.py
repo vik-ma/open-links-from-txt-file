@@ -32,7 +32,20 @@ else:
     batch_warning = config.get("USERCONFIG", "batch_warning")
     delay = config.get("USERCONFIG", "delay")
     defaultdir = config.get("USERCONFIG", "defaultdir")
-    print(str(defaultdir))
+
+
+def add_browser_path():
+    filename = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
+                                         filetypes=[("Executable file (*.exe)", "*.exe"), ("All Files", "*.*")])
+    
+    get_browsername = filename.split("/")
+    browsername = get_browsername[-1].split(".")
+
+    if filename != "":
+        config.set("BROWSER_PATHS", browsername[0], filename)
+        with open("config.ini", "w") as configfile:
+            config.write(configfile)
+
 
 
 def read_file(target_file) -> list:
