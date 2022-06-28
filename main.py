@@ -34,20 +34,6 @@ else:                                           #Creates default config.ini if i
         config.write(configfile)
 
 
-def add_browser_path():
-    filename = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
-                                         filetypes=[("Executable file (*.exe)", "*.exe"), ("All Files", "*.*")])
-    
-    get_browsername = filename.split("/")
-    browsername = get_browsername[-1].split(".")
-
-    if filename != "":
-        config.set("BROWSER_PATHS", browsername[0], filename)
-        with open("config.ini", "w") as configfile:
-            config.write(configfile)
-
-
-
 def read_file(target_file) -> list:
     """ Takes a .txt file, returns a formatted list for the script
 
@@ -126,8 +112,40 @@ def test_filter_by_domain():
     print(list)
 
 
+def select_file():
+        filename = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
+                                                filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
 
+def add_browser_path():
+    filename = filedialog.askopenfilename(initialdir="/", title="Select File", 
+                                         filetypes=[("Executable file (*.exe)", "*.exe"), ("All Files", "*.*")])
+    get_browsername = filename.split("/")
+    browsername = get_browsername[-1].split(".")
 
+    if filename != "":
+        config.set("BROWSER_PATHS", browsername[0], filename)
+        with open("config.ini", "w") as configfile:
+            config.write(configfile)
+
+def draw_gui():
+    root = tk.Tk()
+    root.title("Test")
+
+    w = 600
+    h = 300
+    ws = root.winfo_screenwidth()
+    hs = root.winfo_screenheight()
+    x = (ws/2) - (w/2) - 0
+    y = (hs/2) - (h/2) - 60
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+    select_file_button = tk.Button(root, text="Select File", command=select_file)
+    select_file_button.place(x=400, y=20)
+    add_browser_button = tk.Button(root, text="Add Browser", command=add_browser_path)
+    add_browser_button.place(x=40, y=20)
+    root.mainloop()
+
+draw_gui()
 #test_filter_by_domain()
 #test_filter_by_lines()
 #test_filter_phrase()
