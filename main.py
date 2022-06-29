@@ -129,12 +129,16 @@ def add_browser_path():
         with open("config.ini", "w") as configfile:
             config.write(configfile)
 
-def get_browser_list():
+def remove_browser(browser):
+    config.remove_option("BROWSER_PATHS", browser)
+    with open("config.ini", "w") as configfile:
+            config.write(configfile)
+
+def get_browser_list() -> list:
     if config.items("BROWSER_PATHS") == []:
         return ["No Browser Added"]
     else:
         return [option for option in config['BROWSER_PATHS']]
-
 
 
 def draw_gui():
@@ -158,16 +162,20 @@ def draw_gui():
     browser_menu.place(x=20, y=150)
 
     def reset_browser_menu():
+        """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
+           Solution from https://stackoverflow.com/questions/17580218/changing-the-options-of-a-optionmenu-when-clicking-a-button
+        """
         browser_selection.set(get_browser_list()[0])
         browser_menu['menu'].delete(0, 'end')
 
-        # Insert list of new options (tk._setit hooks them up to var)
         new_choices = get_browser_list()
         for choice in new_choices:
             browser_menu['menu'].add_command(label=choice, command=tk._setit(browser_selection, choice))
 
     add_browser_button = tk.Button(root, text="Add Browser", command=lambda:[add_browser_path(), reset_browser_menu()])
     add_browser_button.place(x=40, y=20)
+    del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
+    del_browser_button.place(x=100, y=80)
     test_button = tk.Button(root, text="TEST", command=reset_browser_menu)
     test_button.place(x=200, y=30)
 
