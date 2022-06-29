@@ -1,3 +1,4 @@
+from cgi import test
 import tkinter as tk
 from tkinter import filedialog, Text
 import pathlib
@@ -11,6 +12,7 @@ DESKTOP = pathlib.Path.home() / 'Desktop'
 batch_warning = 20
 delay = 0.25
 defaultdir = DESKTOP
+
 
 config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
 has_config = pathlib.Path("config.ini").exists()
@@ -127,9 +129,18 @@ def add_browser_path():
         with open("config.ini", "w") as configfile:
             config.write(configfile)
 
+def get_browser_list():
+    if config.items("BROWSER_PATHS") == []:
+        return ["No Browser Added"]
+    else:
+        return [option for option in config['BROWSER_PATHS']]
+    
+
 def draw_gui():
     root = tk.Tk()
     root.title("Test")
+    browser_selection = tk.StringVar(root)
+    browser_selection.set("Select Browser")
 
     w = 600
     h = 300
@@ -143,6 +154,15 @@ def draw_gui():
     select_file_button.place(x=400, y=20)
     add_browser_button = tk.Button(root, text="Add Browser", command=add_browser_path)
     add_browser_button.place(x=40, y=20)
+    browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
+    browser_menu.place(x=20, y=150)
+
+
+    test_button = tk.Button(root, text="TEST", command=get_browser_list)
+    test_button.place(x=200, y=30)
+
+
+
     root.mainloop()
 
 draw_gui()
