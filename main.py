@@ -17,6 +17,10 @@ defaultdir = DESKTOP
 config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
 has_config = pathlib.Path("config.ini").exists()
 
+def write_config():
+    with open("config.ini", "w") as configfile:
+        config.write(configfile)
+
 if has_config:
     config.read("config.ini")
     batch_warning = config.get("USERCONFIG", "batch_warning")
@@ -32,8 +36,7 @@ else:                                           #Creates default config.ini if i
     config.set("USERCONFIG", "batch_warning", str(batch_warning))
     config.set("USERCONFIG", "delay", str(delay))
     config.set("USERCONFIG", "defaultdir", str(DESKTOP))
-    with open("config.ini", "w") as configfile:
-        config.write(configfile)
+    write_config()
 
 def restore_default_config():
     default_config = config.items("DEFAULT")
@@ -41,8 +44,7 @@ def restore_default_config():
     for k, v in default_config:
         config.set("USERCONFIG", k, v)
 
-    with open("config.ini", "w") as configfile:
-        config.write(configfile)
+    write_config()
 
 
 def read_file(target_file) -> list:
@@ -135,13 +137,11 @@ def add_browser_path():
 
     if filename != "":
         config.set("BROWSER_PATHS", browsername[0], filename)
-        with open("config.ini", "w") as configfile:
-            config.write(configfile)
+        write_config()
 
 def remove_browser(browser):
     config.remove_option("BROWSER_PATHS", browser)
-    with open("config.ini", "w") as configfile:
-            config.write(configfile)
+    write_config()
 
 def get_browser_list() -> list:
     if config.items("BROWSER_PATHS") == []:
