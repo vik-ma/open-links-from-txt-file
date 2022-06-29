@@ -134,13 +134,14 @@ def get_browser_list():
         return ["No Browser Added"]
     else:
         return [option for option in config['BROWSER_PATHS']]
-    
+
+
 
 def draw_gui():
     root = tk.Tk()
     root.title("Test")
     browser_selection = tk.StringVar(root)
-    browser_selection.set("Select Browser")
+    browser_selection.set(get_browser_list()[0])
 
     w = 600
     h = 300
@@ -152,18 +153,26 @@ def draw_gui():
 
     select_file_button = tk.Button(root, text="Select File", command=select_file)
     select_file_button.place(x=400, y=20)
-    add_browser_button = tk.Button(root, text="Add Browser", command=add_browser_path)
-    add_browser_button.place(x=40, y=20)
+
     browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
     browser_menu.place(x=20, y=150)
 
+    def reset_browser_menu():
+        browser_selection.set(get_browser_list()[0])
+        browser_menu['menu'].delete(0, 'end')
 
-    test_button = tk.Button(root, text="TEST", command=get_browser_list)
+        # Insert list of new options (tk._setit hooks them up to var)
+        new_choices = get_browser_list()
+        for choice in new_choices:
+            browser_menu['menu'].add_command(label=choice, command=tk._setit(browser_selection, choice))
+
+    add_browser_button = tk.Button(root, text="Add Browser", command=lambda:[add_browser_path(), reset_browser_menu()])
+    add_browser_button.place(x=40, y=20)
+    test_button = tk.Button(root, text="TEST", command=reset_browser_menu)
     test_button.place(x=200, y=30)
 
-
-
     root.mainloop()
+    
 
 draw_gui()
 #test_filter_by_domain()
