@@ -1,10 +1,9 @@
-from cgi import test
+from importlib.resources import path
 import tkinter as tk
-from tkinter import filedialog, Text
+from tkinter import filedialog, Text, messagebox
 import pathlib
 import webbrowser
 import time
-import configparser
 from configparser import ConfigParser
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
@@ -46,6 +45,25 @@ def restore_default_config():
 
     write_config()
 
+def set_batch_warning(input):
+    if isinstance(input, int):
+        config.set("USERCONFIG", "batch_warning", str(input))
+        write_config()
+    else:
+        messagebox.showerror("Error", "Value must be an Int")
+
+def set_delay(input):
+    if isinstance(input, float | int):
+        config.set("USERCONFIG", "delay", str(input))
+        write_config()
+    else:
+        messagebox.showerror("Error", "Value must be a Float or an Int")
+
+def set_default_dir():
+    folder = filedialog.askdirectory(initialdir=DESKTOP)
+    if folder != "":
+        config.set("USERCONFIG", "defaultdir", folder)
+        write_config()
 
 def read_file(target_file) -> list:
     """ Takes a .txt file, returns a formatted list for the script
@@ -128,6 +146,7 @@ def test_filter_by_domain():
 def select_file():
         filename = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
                                                 filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
+        print(filename)
 
 def add_browser_path():
     filename = filedialog.askopenfilename(initialdir="/", title="Select File", 
@@ -188,7 +207,7 @@ def draw_gui():
     add_browser_button.place(x=40, y=20)
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=100, y=80)
-    test_button = tk.Button(root, text="TEST", command=reset_browser_menu)
+    test_button = tk.Button(root, text="TEST", command=set_default_dir)
     test_button.place(x=200, y=30)
 
     root.mainloop()
