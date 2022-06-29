@@ -35,6 +35,15 @@ else:                                           #Creates default config.ini if i
     with open("config.ini", "w") as configfile:
         config.write(configfile)
 
+def restore_default_config():
+    default_config = config.items("DEFAULT")
+
+    for k, v in default_config:
+        config.set("USERCONFIG", k, v)
+
+    with open("config.ini", "w") as configfile:
+        config.write(configfile)
+
 
 def read_file(target_file) -> list:
     """ Takes a .txt file, returns a formatted list for the script
@@ -160,6 +169,9 @@ def draw_gui():
 
     browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
     browser_menu.place(x=20, y=150)
+
+    restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_config)
+    restore_default_button.place(x=10, y=250)
 
     def reset_browser_menu():
         """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
