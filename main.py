@@ -11,7 +11,7 @@ batch_warning = 20
 delay = 0.25
 defaultdir = DESKTOP
 autoclose = False
-
+opentxtfile = False
 
 config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
 has_config = pathlib.Path("config.ini").exists()
@@ -26,6 +26,8 @@ if has_config:
     delay = config.get("USERCONFIG", "delay")
     defaultdir = config.get("USERCONFIG", "defaultdir") 
     autoclose = config.get("USERCONFIG", "autoclose")
+    opentxtfile = config.get("USERCONFIG", "opentxtfile")
+
 else:                                               #Creates default config.ini if it doesn't exist
     config.add_section("DEFAULT")
     config.add_section("USERCONFIG")
@@ -34,6 +36,7 @@ else:                                               #Creates default config.ini 
         config.set(section, "delay", str(delay))
         config.set(section, "defaultdir", str(DESKTOP))
         config.set(section, "autoclose", str(autoclose))
+        config.set(section, "opentxtfile", str(opentxtfile))
     config.add_section("BROWSER_PATHS")
     write_config()
 
@@ -67,6 +70,10 @@ def set_default_dir():
 
 def set_autoclose(value):
     config.set("USERCONFIG", "autoclose", str(value))
+    write_config()
+
+def set_opentxtfile(value):
+    config.set("USERCONFIG", "opentxtfile", str(value))
     write_config()
 
 def read_file(target_file) -> list:
@@ -228,7 +235,7 @@ def draw_gui():
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=100, y=80)
     
-    test_button = tk.Button(root, text="TEST", command=check_autoclose)
+    test_button = tk.Button(root, text="TEST", command="")
     test_button.place(x=200, y=30)
 
     root.mainloop()
