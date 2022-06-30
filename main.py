@@ -25,7 +25,7 @@ if has_config:
     batch_warning = config.get("USERCONFIG", "batch_warning")
     delay = config.get("USERCONFIG", "delay")
     defaultdir = config.get("USERCONFIG", "defaultdir") 
-else:                                           #Creates default config.ini if it doesn't exist
+else:                                               #Creates default config.ini if it doesn't exist
     config.add_section("DEFAULT")
     config.add_section("USERCONFIG")
     config.add_section("BROWSER_PATHS")
@@ -82,7 +82,7 @@ def read_file(target_file) -> list:
             f = f.strip()
             f = f.lower()
             line_contents = f.split(None,1)
-            if (len(line_contents) > 1):                        # Replaces "\t" with spaces in the comment (if there is a comment)
+            if (len(line_contents) > 1):            # Replaces "\t" with spaces in the comment (if there is a comment)
                 x = line_contents[1].split("\t")    
                 x = " ".join(x)
                 line_contents[1] = x
@@ -192,6 +192,8 @@ def draw_gui():
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_config)
     restore_default_button.place(x=10, y=250)
 
+    
+
     def reset_browser_menu():
         """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
            Solution from https://stackoverflow.com/questions/17580218/changing-the-options-of-a-optionmenu-when-clicking-a-button
@@ -203,11 +205,16 @@ def draw_gui():
         for choice in new_choices:
             browser_menu['menu'].add_command(label=choice, command=tk._setit(browser_selection, choice))
 
+    def close():
+        root.destroy()
+
     add_browser_button = tk.Button(root, text="Add Browser", command=lambda:[add_browser_path(), reset_browser_menu()])
     add_browser_button.place(x=40, y=20)
+
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=100, y=80)
-    test_button = tk.Button(root, text="TEST", command=set_default_dir)
+    
+    test_button = tk.Button(root, text="TEST", command=close)
     test_button.place(x=200, y=30)
 
     root.mainloop()
