@@ -26,19 +26,15 @@ if has_config:
     delay = config.get("USERCONFIG", "delay")
     defaultdir = config.get("USERCONFIG", "defaultdir") 
     autoclose = config.get("USERCONFIG", "autoclose")
-
 else:                                               #Creates default config.ini if it doesn't exist
     config.add_section("DEFAULT")
     config.add_section("USERCONFIG")
+    for section in config.sections():
+        config.set(section, "batch_warning", str(batch_warning))
+        config.set(section, "delay", str(delay))
+        config.set(section, "defaultdir", str(DESKTOP))
+        config.set(section, "autoclose", str(autoclose))
     config.add_section("BROWSER_PATHS")
-    config.set("DEFAULT", "batch_warning", str(batch_warning))
-    config.set("DEFAULT", "delay", str(delay))
-    config.set("DEFAULT", "defaultdir", str(DESKTOP))
-    config.set("DEFAULT", "autoclose", str(autoclose))
-    config.set("USERCONFIG", "batch_warning", str(batch_warning))
-    config.set("USERCONFIG", "delay", str(delay))
-    config.set("USERCONFIG", "defaultdir", str(DESKTOP))
-    config.set("USERCONFIG", "autoclose", str(autoclose))
     write_config()
 
 def restore_default_config():
