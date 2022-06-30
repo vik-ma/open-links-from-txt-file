@@ -1,4 +1,3 @@
-from importlib.resources import path
 import tkinter as tk
 from tkinter import filedialog, Text, messagebox
 import pathlib
@@ -202,8 +201,7 @@ def draw_gui():
     
     def check_autoclose(): 
         if config.get("USERCONFIG", "autoclose") != close_check.get():
-            set_autoclose(close_check.get())
-            print(config.get("USERCONFIG", "autoclose"))    
+            set_autoclose(close_check.get())   
         if close_check.get() is True:
             close()
 
