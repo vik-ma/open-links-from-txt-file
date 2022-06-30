@@ -168,7 +168,6 @@ def get_browser_list() -> list:
     else:
         return [option for option in config['BROWSER_PATHS']]
 
-
 def draw_gui():
     root = tk.Tk()
     root.title("Test")
@@ -191,9 +190,16 @@ def draw_gui():
 
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_config)
     restore_default_button.place(x=10, y=250)
+    
+    def check_autoclose():     
+        if close_check.get() is True:
+            close()
+
+    close_check = tk.BooleanVar()
+    autoclose_checkbox = tk.Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
+    autoclose_checkbox.place(x=300, y=200)
 
     
-
     def reset_browser_menu():
         """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
            Solution from https://stackoverflow.com/questions/17580218/changing-the-options-of-a-optionmenu-when-clicking-a-button
@@ -208,13 +214,15 @@ def draw_gui():
     def close():
         root.destroy()
 
+    
+
     add_browser_button = tk.Button(root, text="Add Browser", command=lambda:[add_browser_path(), reset_browser_menu()])
     add_browser_button.place(x=40, y=20)
 
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=100, y=80)
     
-    test_button = tk.Button(root, text="TEST", command=close)
+    test_button = tk.Button(root, text="TEST", command=check_autoclose)
     test_button.place(x=200, y=30)
 
     root.mainloop()
