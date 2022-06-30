@@ -11,6 +11,7 @@ DESKTOP = pathlib.Path.home() / 'Desktop'
 batch_warning = 20
 delay = 0.25
 defaultdir = DESKTOP
+autoclose = False
 
 
 config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
@@ -25,6 +26,8 @@ if has_config:
     batch_warning = config.get("USERCONFIG", "batch_warning")
     delay = config.get("USERCONFIG", "delay")
     defaultdir = config.get("USERCONFIG", "defaultdir") 
+    autoclose = config.get("USERCONFIG", "autoclose")
+
 else:                                               #Creates default config.ini if it doesn't exist
     config.add_section("DEFAULT")
     config.add_section("USERCONFIG")
@@ -32,9 +35,11 @@ else:                                               #Creates default config.ini 
     config.set("DEFAULT", "batch_warning", str(batch_warning))
     config.set("DEFAULT", "delay", str(delay))
     config.set("DEFAULT", "defaultdir", str(DESKTOP))
+    config.set("DEFAULT", "autoclose", str(autoclose))
     config.set("USERCONFIG", "batch_warning", str(batch_warning))
     config.set("USERCONFIG", "delay", str(delay))
     config.set("USERCONFIG", "defaultdir", str(DESKTOP))
+    config.set("USERCONFIG", "autoclose", str(autoclose))
     write_config()
 
 def restore_default_config():
@@ -64,6 +69,10 @@ def set_default_dir():
     if folder != "":
         config.set("USERCONFIG", "defaultdir", folder)
         write_config()
+
+def set_autoclose(value):
+    config.set("USERCONFIG", "autoclose", str(value))
+    write_config()
 
 def read_file(target_file) -> list:
     """ Takes a .txt file, returns a formatted list for the script
@@ -191,7 +200,10 @@ def draw_gui():
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_config)
     restore_default_button.place(x=10, y=250)
     
-    def check_autoclose():     
+    def check_autoclose(): 
+        if config.get("USERCONFIG", "autoclose") != close_check.get():
+            set_autoclose(close_check.get())
+            print(config.get("USERCONFIG", "autoclose"))    
         if close_check.get() is True:
             close()
 
