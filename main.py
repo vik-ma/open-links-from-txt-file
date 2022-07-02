@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, Text, messagebox, simpledialog, Label
+from tkinter import StringVar, filedialog, Text, messagebox, simpledialog, Label
 import pathlib
 import os
 import webbrowser
@@ -204,10 +204,10 @@ def draw_gui():
     select_file_button.place(x=400, y=20)
 
     browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
-    browser_menu.place(x=20, y=150)
+    browser_menu.place(x=20, y=110)
 
-    restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_config)
-    restore_default_button.place(x=10, y=200)
+    restore_default_button = tk.Button(root, text="Restore Default Settings", command=lambda:[restore_default_config(), reset_variables()])
+    restore_default_button.place(x=10, y=175)
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
@@ -221,11 +221,18 @@ def draw_gui():
     change_delay.place(x=325, y=270)
     change_delay.insert(0, config.get("USERCONFIG", "delay"))
 
-    set_warning_button = tk.Button(root, text="Change", command="")
-    set_warning_button.place(x=365, y=237)
-    set_delay_button = tk.Button(root, text="Change", command="")
-    set_delay_button.place(x=365, y=267)
-    
+    defaultdir_get = StringVar()
+    defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))
+    defaultdir_label = tk.Label(root, textvariable=defaultdir_get)
+    defaultdir_label.place(x=10, y=210)
+
+    set_warning_button = tk.Button(root, text="Change", command=lambda:[set_batch_warning(change_warning.get()), reset_variables()])
+    set_warning_button.place(x=365, y=236)
+    set_delay_button = tk.Button(root, text="Change", command=lambda:[set_delay(change_delay.get()), reset_variables()])
+    set_delay_button.place(x=365, y=266)
+    set_defaultdir_button = tk.Button(root, text="Change", command=lambda:[set_default_dir(), reset_variables()])
+    set_defaultdir_button.place(x=365, y=206)
+
     def check_checkboxes(): 
         if config.get("USERCONFIG", "autoclose") != close_check.get():
             set_autoclose(close_check.get()) 
@@ -256,7 +263,12 @@ def draw_gui():
             browser_menu['menu'].add_command(label=choice, command=tk._setit(browser_selection, choice))
 
     def reset_variables():
-        pass
+        defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))        
+        change_warning.delete(0, tk.END)
+        change_delay.delete(0, tk.END)
+        change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
+        change_delay.insert(0, config.get("USERCONFIG", "delay"))
+        
 
     def close():
         root.destroy()
