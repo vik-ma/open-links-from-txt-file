@@ -205,8 +205,14 @@ def draw_gui():
 
     browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
     browser_menu.place(x=20, y=110)
+    
+    def restore_default_warning():
+        ask = messagebox.askquestion("Restore Default Config", "Do you really want to reset to default configuration? \nThis cannot be undone.")
+        if ask == "yes":
+            restore_default_config()
+            reset_variables()
 
-    restore_default_button = tk.Button(root, text="Restore Default Settings", command=lambda:[restore_default_config(), reset_variables()])
+    restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
     restore_default_button.place(x=10, y=175)
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
@@ -268,7 +274,6 @@ def draw_gui():
         change_delay.delete(0, tk.END)
         change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
         change_delay.insert(0, config.get("USERCONFIG", "delay"))
-        
 
     def close():
         root.destroy()
