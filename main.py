@@ -8,11 +8,11 @@ from configparser import ConfigParser
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
-batch_warning = 20      #Warns when trying to open more than x links
-delay = 250             #Delay between opening links in ms
+batch_warning = 20      #Warns when trying to open more than this many links
+delay = 250             #Delay between opening links in milliseconds
 defaultdir = DESKTOP    #Default directory when selecting file
-autoclose = False       #Closes program after opening or not
-opentxtfile = False     #Opens text file in default editor or not
+autoclose = False       #Closes program after opening links if True
+opentxtfile = False     #Opens text file in default text editor if True
 
 config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
 has_config = pathlib.Path("config.ini").exists()
