@@ -195,7 +195,8 @@ def draw_gui():
     x = (ws/2) - (w/2) - 0
     y = (hs/2) - (h/2) - 60
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
-
+    root.resizable(width=False, height=False)
+    
     select_file_button = tk.Button(root, text="Select File", command=select_file)
     select_file_button.place(x=400, y=20)
 
