@@ -206,16 +206,23 @@ def draw_gui():
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_config)
     restore_default_button.place(x=10, y=250)
     
-    def check_autoclose(): 
+    def check_checkboxes(): 
         if config.get("USERCONFIG", "autoclose") != close_check.get():
-            set_autoclose(close_check.get())   
+            set_autoclose(close_check.get()) 
+        if config.get("USERCONFIG", "opentxtfile") != open_txt_check.get():
+            set_opentxtfile(open_txt_check.get())  
         if close_check.get() is True:
             close()
 
     close_check = tk.BooleanVar()
+    close_check.set(config.get("USERCONFIG", "autoclose"))
     autoclose_checkbox = tk.Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
     autoclose_checkbox.place(x=300, y=200)
 
+    open_txt_check = tk.BooleanVar()
+    open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
+    open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
+    open_txt_checkbox.place(x=300, y=220)
     
     def reset_browser_menu():
         """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
@@ -239,7 +246,7 @@ def draw_gui():
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=100, y=80)
     
-    test_button = tk.Button(root, text="TEST", command=set_delay)
+    test_button = tk.Button(root, text="TEST", command=check_checkboxes)
     test_button.place(x=200, y=30)
 
     root.mainloop()
