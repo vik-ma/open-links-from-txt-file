@@ -1,7 +1,7 @@
-from email import message
 import tkinter as tk
 from tkinter import filedialog, Text, messagebox
 import pathlib
+import os
 import webbrowser
 import time
 from configparser import ConfigParser
@@ -76,6 +76,9 @@ def set_autoclose(value):
 def set_opentxtfile(value):
     config.set("USERCONFIG", "opentxtfile", str(value))
     write_config()
+
+def open_file_in_default_editor(filename):
+    os.startfile(filename)
 
 def read_file(target_file) -> list:
     """ Takes a .txt file, returns a formatted list for the script
@@ -158,7 +161,7 @@ def test_filter_by_domain():
 def select_file():
         filename = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
                                                 filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
-        print(filename)
+        open_file_in_default_editor(filename)
 
 
 
