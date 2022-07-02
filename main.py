@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import StringVar, filedialog, Text, messagebox, simpledialog, Label
+from tkinter import StringVar, filedialog, Text, messagebox, Label
 import pathlib
 import os
 import webbrowser
@@ -161,9 +161,8 @@ def test_filter_by_domain():
 def select_file():
         filename = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
                                                 filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
-        open_file_in_default_editor(filename)
-
-
+        if filename != "":
+            open_file_in_default_editor(filename)
 
 def add_browser_path():
     filename = filedialog.askopenfilename(initialdir="/", title="Select File", 
@@ -187,7 +186,7 @@ def get_browser_list() -> list:
 
 def draw_gui():
     root = tk.Tk()
-    root.title("Test")
+    root.title("Open Links")
     browser_selection = tk.StringVar(root)
     browser_selection.set(get_browser_list()[0])
 
@@ -200,20 +199,13 @@ def draw_gui():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
     
-    select_file_button = tk.Button(root, text="Select File", command=select_file)
-    select_file_button.place(x=400, y=20)
+    select_file_button = tk.Button(root, text="Select Text File", command=select_file)
+    select_file_button.place(x=230, y=30)
 
+    browser_label = tk.Label(root, text="Select Browser:")
+    browser_label.place(x=10, y=10)
     browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
-    browser_menu.place(x=20, y=110)
-    
-    def restore_default_warning():
-        ask = messagebox.askquestion("Restore Default Config", "Do you really want to reset to default configuration? \nThis cannot be undone.")
-        if ask == "yes":
-            restore_default_config()
-            reset_variables()
-
-    restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
-    restore_default_button.place(x=10, y=175)
+    browser_menu.place(x=10, y=30)
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
@@ -250,12 +242,12 @@ def draw_gui():
     close_check = tk.BooleanVar()
     close_check.set(config.get("USERCONFIG", "autoclose"))
     autoclose_checkbox = tk.Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
-    autoclose_checkbox.place(x=300, y=100)
+    autoclose_checkbox.place(x=325, y=160)
 
     open_txt_check = tk.BooleanVar()
     open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
     open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
-    open_txt_checkbox.place(x=300, y=120)
+    open_txt_checkbox.place(x=325, y=180)
     
     def reset_browser_menu():
         """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
@@ -274,18 +266,32 @@ def draw_gui():
         change_delay.delete(0, tk.END)
         change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
         change_delay.insert(0, config.get("USERCONFIG", "delay"))
+    
+    def restore_default_warning():
+        ask = messagebox.askquestion("Restore Default Config", "Do you really want to reset to default configuration? \nThis cannot be undone.")
+        if ask == "yes":
+            restore_default_config()
+            reset_variables()
+            close_check.set(config.get("USERCONFIG", "autoclose"))
+            open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
 
     def close():
         root.destroy()
 
+    restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
+    restore_default_button.place(x=10, y=175)
+
+    add_remove_browser_label = tk.Label(root, text="Add or remove browser from menu:")
+    add_remove_browser_label.place(x=10, y=75)
+
     add_browser_button = tk.Button(root, text="Add Browser", command=lambda:[add_browser_path(), reset_browser_menu()])
-    add_browser_button.place(x=40, y=20)
+    add_browser_button.place(x=10, y=100)
 
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
-    del_browser_button.place(x=100, y=80)
+    del_browser_button.place(x=10, y=130)
     
     test_button = tk.Button(root, text="TEST", command=set_delay)
-    test_button.place(x=200, y=30)
+    test_button.place(x=400, y=30)
 
     root.mainloop()
     
