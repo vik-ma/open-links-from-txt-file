@@ -177,7 +177,7 @@ def get_browser_list() -> list:
     if config.items("BROWSER_PATHS") == []:
         return ["No Browser Added"]
     else:
-        return [option for option in config['BROWSER_PATHS']]
+        return [option.title() for option in config['BROWSER_PATHS']]
 
 def draw_gui():
     root = tk.Tk()
