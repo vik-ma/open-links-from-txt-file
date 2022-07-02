@@ -1,3 +1,4 @@
+from email import message
 import tkinter as tk
 from tkinter import filedialog, Text, messagebox
 import pathlib
@@ -49,18 +50,18 @@ def restore_default_config():
     write_config()
 
 def set_batch_warning(input):
-    if isinstance(input, int):
+    if str(input).isdigit():
         config.set("USERCONFIG", "batch_warning", str(input))
         write_config()
     else:
-        messagebox.showerror("Error", "Value must be an Int")
+        messagebox.showerror("Error", "Value must be a non-negative integer")
 
 def set_delay(input):
-    if isinstance(input, float | int):
-        config.set("USERCONFIG", "delay", str(input))
+    if str(input).isdigit():
+        config.set("USERCONFIG", "delay", str(input/1000))
         write_config()
     else:
-        messagebox.showerror("Error", "Value must be a Float or an Int")
+        messagebox.showerror("Error", "Value must be a non-negative integer")
 
 def set_default_dir():
     folder = filedialog.askdirectory(initialdir=DESKTOP)
@@ -159,6 +160,8 @@ def select_file():
                                                 filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
         print(filename)
 
+
+
 def add_browser_path():
     filename = filedialog.askopenfilename(initialdir="/", title="Select File", 
                                          filetypes=[("Executable file (*.exe)", "*.exe"), ("All Files", "*.*")])
@@ -235,7 +238,7 @@ def draw_gui():
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=100, y=80)
     
-    test_button = tk.Button(root, text="TEST", command="")
+    test_button = tk.Button(root, text="TEST", command=set_delay)
     test_button.place(x=200, y=30)
 
     root.mainloop()
