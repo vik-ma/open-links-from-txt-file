@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, Text, messagebox
+from tkinter import filedialog, Text, messagebox, simpledialog, Label
 import pathlib
 import os
 import webbrowser
@@ -8,11 +8,11 @@ from configparser import ConfigParser
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
-batch_warning = 20
-delay = 0.25
-defaultdir = DESKTOP
-autoclose = False
-opentxtfile = False
+batch_warning = 20      #Warns when trying to open more than x links
+delay = 250             #Delay between opening links in ms
+defaultdir = DESKTOP    #Default directory when selecting file
+autoclose = False       #Closes program after opening or not
+opentxtfile = False     #Opens text file in default editor or not
 
 config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
 has_config = pathlib.Path("config.ini").exists()
@@ -58,7 +58,7 @@ def set_batch_warning(input):
 
 def set_delay(input):
     if str(input).isdigit():
-        config.set("USERCONFIG", "delay", str(input/1000))
+        config.set("USERCONFIG", "delay", str(input))
         write_config()
     else:
         messagebox.showerror("Error", "Value must be a non-negative integer")
@@ -207,7 +207,24 @@ def draw_gui():
     browser_menu.place(x=20, y=150)
 
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_config)
-    restore_default_button.place(x=10, y=250)
+    restore_default_button.place(x=10, y=200)
+
+    warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
+    warning_label.place(x=10, y=240)
+    change_warning = tk.Entry(root, width=5)
+    change_warning.place(x=325, y=240)
+    change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
+
+    delay_label = tk.Label(root, text="Delay between opening links (In milliseconds):")
+    delay_label.place(x=10, y=270)
+    change_delay = tk.Entry(root, width=5)
+    change_delay.place(x=325, y=270)
+    change_delay.insert(0, config.get("USERCONFIG", "delay"))
+
+    set_warning_button = tk.Button(root, text="Change", command="")
+    set_warning_button.place(x=365, y=237)
+    set_delay_button = tk.Button(root, text="Change", command="")
+    set_delay_button.place(x=365, y=267)
     
     def check_checkboxes(): 
         if config.get("USERCONFIG", "autoclose") != close_check.get():
@@ -220,12 +237,12 @@ def draw_gui():
     close_check = tk.BooleanVar()
     close_check.set(config.get("USERCONFIG", "autoclose"))
     autoclose_checkbox = tk.Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
-    autoclose_checkbox.place(x=300, y=200)
+    autoclose_checkbox.place(x=300, y=100)
 
     open_txt_check = tk.BooleanVar()
     open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
     open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
-    open_txt_checkbox.place(x=300, y=220)
+    open_txt_checkbox.place(x=300, y=120)
     
     def reset_browser_menu():
         """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
@@ -238,10 +255,11 @@ def draw_gui():
         for choice in new_choices:
             browser_menu['menu'].add_command(label=choice, command=tk._setit(browser_selection, choice))
 
+    def reset_variables():
+        pass
+
     def close():
         root.destroy()
-
-    
 
     add_browser_button = tk.Button(root, text="Add Browser", command=lambda:[add_browser_path(), reset_browser_menu()])
     add_browser_button.place(x=40, y=20)
@@ -249,7 +267,7 @@ def draw_gui():
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=100, y=80)
     
-    test_button = tk.Button(root, text="TEST", command=check_checkboxes)
+    test_button = tk.Button(root, text="TEST", command=set_delay)
     test_button.place(x=200, y=30)
 
     root.mainloop()
