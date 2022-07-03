@@ -200,12 +200,16 @@ def draw_gui():
     root.resizable(width=False, height=False)
     
     select_file_button = tk.Button(root, text="Select Text File", command=select_file)
-    select_file_button.place(x=230, y=30)
+    select_file_button.place(x=500, y=10)
 
-    browser_label = tk.Label(root, text="Select Browser:")
-    browser_label.place(x=10, y=10)
+    browser_label = tk.Label(root, text="Open In Browser:", font="Bold")
+    browser_label.place(x=12, y=5)
     browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
     browser_menu.place(x=10, y=30)
+
+
+    select_filter_label = tk.Label(root, text="Select Filter:", font="Bold")
+    select_filter_label.place(x=230, y=5)
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
@@ -248,7 +252,7 @@ def draw_gui():
     open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
     open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
     open_txt_checkbox.place(x=325, y=180)
-    
+
     def reset_browser_menu():
         """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
            Solution from https://stackoverflow.com/questions/17580218/changing-the-options-of-a-optionmenu-when-clicking-a-button
@@ -281,17 +285,17 @@ def draw_gui():
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
     restore_default_button.place(x=10, y=175)
 
-    add_remove_browser_label = tk.Label(root, text="Add or remove browser to/from menu:")
-    add_remove_browser_label.place(x=10, y=75)
+    add_remove_browser_label = tk.Label(root, text="Add/Remove Browser Path:")
+    add_remove_browser_label.place(x=10, y=87)
 
     add_browser_button = tk.Button(root, text="Add Browser", command=lambda:[add_browser_path(), reset_browser_menu()])
-    add_browser_button.place(x=10, y=100)
+    add_browser_button.place(x=10, y=110)
 
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
-    del_browser_button.place(x=10, y=130)
+    del_browser_button.place(x=10, y=140)
     
     test_button = tk.Button(root, text="TEST", command=set_delay)
-    test_button.place(x=400, y=30)
+    test_button.place(x=530, y=230)
 
     root.mainloop()
     
