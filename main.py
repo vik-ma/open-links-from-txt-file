@@ -281,7 +281,7 @@ def draw_gui():
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
     restore_default_button.place(x=10, y=175)
 
-    add_remove_browser_label = tk.Label(root, text="Add or remove browser from menu:")
+    add_remove_browser_label = tk.Label(root, text="Add or remove browser to/from menu:")
     add_remove_browser_label.place(x=10, y=75)
 
     add_browser_button = tk.Button(root, text="Add Browser", command=lambda:[add_browser_path(), reset_browser_menu()])
