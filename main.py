@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import StringVar, filedialog, Text, messagebox, Label
 import pathlib
 import os
+from turtle import color
 import webbrowser
 import time
 from configparser import ConfigParser
@@ -199,28 +200,47 @@ def draw_gui():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
     
-    select_file_button = tk.Button(root, text="Select Text File", command=select_file)
-    select_file_button.place(x=500, y=10)
+    select_file_button = tk.Button(root, text="Select Text File", command=select_file, font="Bold")
+    select_file_button.place(x=185, y=10)
 
     browser_label = tk.Label(root, text="Open In Browser:", font="Bold")
-    browser_label.place(x=12, y=5)
+    browser_label.place(x=12, y=10)
     browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
-    browser_menu.place(x=10, y=30)
-
+    browser_menu.configure(font="Bold")
+    browser_menu.place(x=10, y=35)
 
     select_filter_label = tk.Label(root, text="Select Filter:", font="Bold")
-    select_filter_label.place(x=230, y=5)
+    select_filter_label.place(x=185, y=50)
+
+    filter_phrase_label = tk.Label(root, text="Open lines containing comment phrase:")
+    filter_phrase_label.place(x=185, y=75)
+    filter_domain_label = tk.Label(root, text="Open lines containing URL:")
+    filter_domain_label.place(x=185, y=105)
+    filter_line_label = tk.Label(root, text="Open all lines in range (Start/End):")
+    filter_line_label.place(x=185, y=135)
+
+    set_phrase_filter = tk.Entry(root, width=20)
+    set_phrase_filter.place(x=405, y=76)
+    set_domain_filter = tk.Entry(root, width=20)
+    set_domain_filter.place(x=405, y=106)
+    set_line_filter_start = tk.Entry(root, width=5)
+    set_line_filter_end = tk.Entry(root, width=5)
+    set_line_filter_start.place(x=405, y=136)
+    set_line_filter_end.place(x=445, y=136)
+
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
+
     change_warning = tk.Entry(root, width=5)
-    change_warning.place(x=325, y=240)
+    change_warning.place(x=325, y=241)
     change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
 
     delay_label = tk.Label(root, text="Delay between opening links (In milliseconds):")
     delay_label.place(x=10, y=270)
+
     change_delay = tk.Entry(root, width=5)
-    change_delay.place(x=325, y=270)
+    change_delay.place(x=325, y=271)
     change_delay.insert(0, config.get("USERCONFIG", "delay"))
 
     defaultdir_get = StringVar()
