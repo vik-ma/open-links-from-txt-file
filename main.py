@@ -160,10 +160,10 @@ def test_filter_by_domain():
 
 
 def select_file():
-        filename = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
+    filename = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
                                                 filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
-        if filename != "":
-            open_file_in_default_editor(filename)
+    if filename != "":
+        open_file_in_default_editor(filename)
 
 def add_browser_path():
     filename = filedialog.askopenfilename(initialdir="/", title="Select File", 
@@ -212,6 +212,11 @@ def draw_gui():
     select_filter_label = tk.Label(root, text="Select Filter:", font="Bold")
     select_filter_label.place(x=185, y=50)
 
+    selected_file = StringVar()
+    selected_file.set("No File Selected")
+    selected_file_label = tk.Label(root, textvariable=selected_file)
+    selected_file_label.place(x=350, y=10)
+
     filter_phrase_label = tk.Label(root, text="Open lines containing comment phrase:")
     filter_phrase_label.place(x=185, y=75)
     filter_domain_label = tk.Label(root, text="Open lines containing URL:")
@@ -228,6 +233,19 @@ def draw_gui():
     set_line_filter_start.place(x=405, y=136)
     set_line_filter_end.place(x=445, y=136)
 
+    current_filter = StringVar()
+    current_filter.set("Open All Lines In Document")
+    display_filter = tk.Label(root, textvariable=current_filter)
+    display_filter.place(x=350, y=30)
+
+    set_phrase_filter_button = tk.Button(root, text="Set", command="")
+    set_phrase_filter_button.place(x=535, y=73)
+    set_domain_filter_button = tk.Button(root, text="Set", command="")
+    set_domain_filter_button.place(x=535, y=103)
+    set_line_filter_button = tk.Button(root, text="Set", command="")
+    set_line_filter_button.place(x=535, y=133)
+    set_no_filter_button = tk.Button(root, text="Reset Filter", command="")
+    set_no_filter_button.place(x=495, y=163)
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
@@ -266,12 +284,12 @@ def draw_gui():
     close_check = tk.BooleanVar()
     close_check.set(config.get("USERCONFIG", "autoclose"))
     autoclose_checkbox = tk.Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
-    autoclose_checkbox.place(x=325, y=160)
+    autoclose_checkbox.place(x=150, y=160)
 
     open_txt_check = tk.BooleanVar()
     open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
     open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
-    open_txt_checkbox.place(x=325, y=180)
+    open_txt_checkbox.place(x=150, y=180)
 
     def reset_browser_menu():
         """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
