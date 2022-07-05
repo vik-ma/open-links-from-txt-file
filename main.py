@@ -306,9 +306,23 @@ def draw_gui():
         if filtertype and filtervalue != "":
             match filtertype:
                 case "Phrase":
-                    pass
+                    try:
+                        if filter_by_phrase(file, filtervalue) != []:
+                            print(filter_by_phrase(file, filtervalue))
+                        else:
+                            messagebox.showerror("Error", f"No phrase '{filtervalue}' in file!")
+                    except Exception as e:                                      #Might never catch anything
+                        messagebox.showerror(e)
+
                 case "Domain":
-                    pass
+                    try:
+                        if filter_by_domain(file, filtervalue) != []:
+                            print(filter_by_domain(file, filtervalue))
+                        else:
+                            messagebox.showerror("Error", f"No URL containing '{filtervalue}' in file!")
+                    except Exception as e:                                      #Might never catch anything
+                        messagebox.showerror(e)
+
                 case "Lines":
                     line_index = filtervalue.split(",")
                     error_msg = "Range values must be valid line numbers in file!"
@@ -319,19 +333,12 @@ def draw_gui():
                         if int(line_index[0]) < 1 or int(line_index[1]) < 1:    #Check if start or end index is 0 or below
                             messagebox.showerror("Error", error_msg)
                             return
-
                         print(filter_by_lines(file, int(line_index[0]), int(line_index[1])))  
-
                     except IndexError:                                          #Catches out of bounds indices
                         messagebox.showerror("Error", error_msg)
                     except ValueError:                                          #Catches non-integer values
                         messagebox.showerror("Error", error_msg)
-
-            
-
-            
-            
-            
+                        
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
