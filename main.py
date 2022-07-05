@@ -312,19 +312,19 @@ def draw_gui():
                 case "Lines":
                     line_index = filtervalue.split(",")
                     error_msg = "Range values must be valid line numbers in file!"
-                    
                     try:
-                        if int(line_index[0]) > int(line_index[1]):         
+                        if int(line_index[0]) > int(line_index[1]):             #Check if start index is greater than end index     
                             messagebox.showerror("Error", error_msg)
                             return
-                        if int(line_index[0]) < 1 or int(line_index[1]) < 1:
+                        if int(line_index[0]) < 1 or int(line_index[1]) < 1:    #Check if start or end index is 0 or below
                             messagebox.showerror("Error", error_msg)
                             return
 
-                        print(filter_by_lines(file, int(line_index[0]), int(line_index[1])))   
-                    except IndexError:
+                        print(filter_by_lines(file, int(line_index[0]), int(line_index[1])))  
+
+                    except IndexError:                                          #Catches out of bounds indices
                         messagebox.showerror("Error", error_msg)
-                    except ValueError:
+                    except ValueError:                                          #Catches non-integer values
                         messagebox.showerror("Error", error_msg)
 
             
