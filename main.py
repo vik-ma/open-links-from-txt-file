@@ -160,11 +160,7 @@ def test_filter_by_domain():
     print(list)
 
 
-def select_file():
-    filename = filedialog.askopenfilename(initialdir=DESKTOP, title="Select File", 
-                                                filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
-    if filename != "":
-        open_file_in_default_editor(filename)
+
 
 def add_browser_path():
     filename = filedialog.askopenfilename(initialdir="/", title="Select File", 
@@ -201,8 +197,23 @@ def draw_gui():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
     
+    selected_file = StringVar()
+    selected_file.set("No File Selected")
+    selected_file_label = tk.Label(root, textvariable=selected_file)
+    selected_file_label.place(x=350, y=10)
+
+    def select_file():
+        filename = filedialog.askopenfilename(initialdir=config.get("USERCONFIG", "defaultdir"), title="Select File", 
+                                                    filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
+        if filename != "":
+            if open_txt_check.get() is True:
+                open_file_in_default_editor(filename)
+            selected_file.set(filename)
+
     select_file_button = tk.Button(root, text="Select Text File", command=select_file, font="Bold")
     select_file_button.place(x=185, y=10)
+
+    
 
     browser_label = tk.Label(root, text="Open In Browser:", font="Bold")
     browser_label.place(x=12, y=10)
@@ -213,10 +224,7 @@ def draw_gui():
     select_filter_label = tk.Label(root, text="Select Filter:", font="Bold")
     select_filter_label.place(x=185, y=50)
 
-    selected_file = StringVar()
-    selected_file.set("No File Selected")
-    selected_file_label = tk.Label(root, textvariable=selected_file)
-    selected_file_label.place(x=350, y=10)
+    
 
     filter_phrase_label = tk.Label(root, text="Open lines containing comment phrase:")
     filter_phrase_label.place(x=185, y=75)
