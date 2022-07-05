@@ -1,9 +1,7 @@
 import tkinter as tk
-from tkinter import StringVar, filedialog, Text, messagebox, Label
+from tkinter import BooleanVar, StringVar, filedialog, Text, messagebox, Label
 import pathlib
 import os
-from tokenize import String
-from turtle import color
 import webbrowser
 import time
 from configparser import ConfigParser
@@ -66,7 +64,7 @@ def set_delay(input):
         messagebox.showerror("Error", "Value must be a non-negative integer")
 
 def set_default_dir():
-    folder = filedialog.askdirectory(initialdir=DESKTOP)
+    folder = filedialog.askdirectory(initialdir=config.get("USERCONFIG", "defaultdir"))
     if folder != "":
         config.set("USERCONFIG", "defaultdir", folder)
         write_config()
@@ -132,10 +130,10 @@ def filter_by_domain(l, p) -> list:
     return filtered_list
 
 
-def filter_by_lines(l, x, y) -> list:
-    start = x-1
-    end = y
-    return l[start:end]
+def filter_by_lines(l, start, end) -> list:
+    newlist = []
+    [newlist.append(l[n]) for n in range(start-1, end)]
+    return newlist
 
 
 def print_list(list):
@@ -213,7 +211,11 @@ def draw_gui():
     select_file_button = tk.Button(root, text="Select Text File", command=select_file, font="Bold")
     select_file_button.place(x=185, y=10)
 
-    
+    def check_if_file_selected():
+        if selected_file.get() == "No File Selected":
+            messagebox.showerror("Error", "Must select a text file to read from first!")
+        else:
+            validate_input()
 
     browser_label = tk.Label(root, text="Open In Browser:", font="Bold")
     browser_label.place(x=12, y=10)
@@ -256,8 +258,7 @@ def draw_gui():
     set_no_filter_button = tk.Button(root, text="Reset Filter", command=lambda:[reset_filter()])
     set_no_filter_button.place(x=495, y=163)
 
-    current_filter_type = StringVar()
-    current_filter_value = StringVar()
+    
 
     def apply_phrase_filter(phrase):
         if phrase != "":
@@ -295,6 +296,42 @@ def draw_gui():
         set_line_filter_start.insert(0, "")
         set_line_filter_end.delete(0, tk.END)
         set_line_filter_end.insert(0, "")
+
+    current_filter_type = StringVar()
+    current_filter_value = StringVar()
+
+    def validate_input():
+        filtertype, filtervalue = current_filter_type.get(), current_filter_value.get()
+        file = read_file(selected_file.get())
+        if filtertype and filtervalue != "":
+            match filtertype:
+                case "Phrase":
+                    pass
+                case "Domain":
+                    pass
+                case "Lines":
+                    line_index = filtervalue.split(",")
+                    error_msg = "Range values must be valid line numbers in file!"
+                    
+                    try:
+                        if int(line_index[0]) > int(line_index[1]):         
+                            messagebox.showerror("Error", error_msg)
+                            return
+                        if int(line_index[0]) < 1 or int(line_index[1]) < 1:
+                            messagebox.showerror("Error", error_msg)
+                            return
+
+                        print(filter_by_lines(file, int(line_index[0]), int(line_index[1])))   
+                    except IndexError:
+                        messagebox.showerror("Error", error_msg)
+                    except ValueError:
+                        messagebox.showerror("Error", error_msg)
+
+            
+
+            
+            
+            
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
@@ -369,6 +406,7 @@ def draw_gui():
     def close():
         root.destroy()
 
+    
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
     restore_default_button.place(x=10, y=175)
 
@@ -381,7 +419,7 @@ def draw_gui():
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=10, y=140)
     
-    test_button = tk.Button(root, text="TEST", command=set_delay)
+    test_button = tk.Button(root, text="TEST", command=lambda:[check_if_file_selected()])
     test_button.place(x=530, y=230)
 
     root.mainloop()
