@@ -226,9 +226,9 @@ def draw_gui():
 
     
 
-    filter_phrase_label = tk.Label(root, text="Open lines containing comment phrase:")
+    filter_phrase_label = tk.Label(root, text="Open all lines containing comment phrase:")
     filter_phrase_label.place(x=185, y=75)
-    filter_domain_label = tk.Label(root, text="Open lines containing URL:")
+    filter_domain_label = tk.Label(root, text="Open all lines containing URL:")
     filter_domain_label.place(x=185, y=105)
     filter_line_label = tk.Label(root, text="Open all lines in range (Start/End):")
     filter_line_label.place(x=185, y=135)
