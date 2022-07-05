@@ -249,32 +249,33 @@ def draw_gui():
     set_no_filter_button.place(x=495, y=163)
 
     current_filter_type = StringVar()
+    current_filter_value = StringVar()
 
     def apply_phrase_filter(phrase):
         if phrase != "":
             current_filter.set(f"Filter by phrase: {phrase}")
             current_filter_type.set("Phrase")
-            print(current_filter_type.get())
+            current_filter_value.set(phrase)
             clear_filter_entries()
 
     def apply_domain_filter(domain):
         if domain != "":
             current_filter.set(f"Filter by URL: {domain}")
             current_filter_type.set("Domain")
-            print(current_filter_type.get())
+            current_filter_value.set(domain)
             clear_filter_entries()
 
     def apply_line_filter(start, end):
         if start != "" and end != "":
             current_filter.set(f"Open Lines {start} - {end}")
             current_filter_type.set("Lines")
-            print(current_filter_type.get())
+            current_filter_value.set(str(start)+","+str(end))
             clear_filter_entries()
 
     def reset_filter():
         current_filter.set("Open All Lines In Document (No Filter Set)")
         current_filter_type.set("")
-        print(current_filter_type.get())
+        current_filter_value.set("")
         clear_filter_entries()
 
     def clear_filter_entries():
