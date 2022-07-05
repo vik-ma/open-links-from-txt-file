@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import StringVar, filedialog, Text, messagebox, Label
 import pathlib
 import os
+from tokenize import String
 from turtle import color
 import webbrowser
 import time
@@ -234,18 +235,57 @@ def draw_gui():
     set_line_filter_end.place(x=445, y=136)
 
     current_filter = StringVar()
-    current_filter.set("Open All Lines In Document")
+    current_filter.set("Open All Lines In Document (No Filter Set)")
     display_filter = tk.Label(root, textvariable=current_filter)
     display_filter.place(x=350, y=30)
 
-    set_phrase_filter_button = tk.Button(root, text="Set", command="")
+    set_phrase_filter_button = tk.Button(root, text="Set", command=lambda:[apply_phrase_filter(set_phrase_filter.get())])
     set_phrase_filter_button.place(x=535, y=73)
-    set_domain_filter_button = tk.Button(root, text="Set", command="")
+    set_domain_filter_button = tk.Button(root, text="Set", command=lambda:[apply_domain_filter(set_domain_filter.get())])
     set_domain_filter_button.place(x=535, y=103)
-    set_line_filter_button = tk.Button(root, text="Set", command="")
+    set_line_filter_button = tk.Button(root, text="Set", command=lambda:[apply_line_filter(set_line_filter_start.get(), set_line_filter_end.get())])
     set_line_filter_button.place(x=535, y=133)
-    set_no_filter_button = tk.Button(root, text="Reset Filter", command="")
+    set_no_filter_button = tk.Button(root, text="Reset Filter", command=lambda:[reset_filter()])
     set_no_filter_button.place(x=495, y=163)
+
+    current_filter_type = StringVar()
+
+    def apply_phrase_filter(phrase):
+        if phrase != "":
+            current_filter.set(f"Filter by phrase: {phrase}")
+            current_filter_type.set("Phrase")
+            print(current_filter_type.get())
+            clear_filter_entries()
+
+    def apply_domain_filter(domain):
+        if domain != "":
+            current_filter.set(f"Filter by URL: {domain}")
+            current_filter_type.set("Domain")
+            print(current_filter_type.get())
+            clear_filter_entries()
+
+    def apply_line_filter(start, end):
+        if start != "" and end != "":
+            current_filter.set(f"Open Lines {start} - {end}")
+            current_filter_type.set("Lines")
+            print(current_filter_type.get())
+            clear_filter_entries()
+
+    def reset_filter():
+        current_filter.set("Open All Lines In Document (No Filter Set)")
+        current_filter_type.set("")
+        print(current_filter_type.get())
+        clear_filter_entries()
+
+    def clear_filter_entries():
+        set_phrase_filter.delete(0, tk.END)
+        set_phrase_filter.insert(0, "")
+        set_domain_filter.delete(0, tk.END)
+        set_domain_filter.insert(0, "")
+        set_line_filter_start.delete(0, tk.END)
+        set_line_filter_start.insert(0, "")
+        set_line_filter_end.delete(0, tk.END)
+        set_line_filter_end.insert(0, "")
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
