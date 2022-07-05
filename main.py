@@ -8,7 +8,7 @@ from configparser import ConfigParser
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
-batch_warning = 20      #Warns when trying to open more than this many links
+batch_warning = 20      #Warns when trying to open more than that many links
 delay = 250             #Delay between opening links in milliseconds
 defaultdir = DESKTOP    #Default directory when selecting file
 autoclose = False       #Closes program after opening links if True
@@ -338,7 +338,7 @@ def draw_gui():
                         messagebox.showerror("Error", error_msg)
                     except ValueError:                                          #Catches non-integer values
                         messagebox.showerror("Error", error_msg)
-                        
+
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
