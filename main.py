@@ -136,30 +136,6 @@ def filter_by_lines(l, start, end) -> list:
     return newlist
 
 
-def print_list(list):
-    for i in list:
-        print(i)
-
-
-def print_test_file():
-    test_txt_file = "test.txt"
-    print_list(read_file(test_txt_file))
-
-def test_filter_phrase():
-    list = filter_by_phrase(read_file("test.txt"), "asdf")
-    print(list)
-
-def test_filter_by_lines():
-    list = filter_by_lines(read_file("test.txt"), 3, 8)
-    print(list)
-
-def test_filter_by_domain():
-    list = filter_by_domain(read_file("test.txt"), "test")
-    print(list)
-
-
-
-
 def add_browser_path():
     filename = filedialog.askopenfilename(initialdir="/", title="Select File", 
                                          filetypes=[("Executable file (*.exe)", "*.exe"), ("All Files", "*.*")])
@@ -454,14 +430,10 @@ def draw_gui():
     del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=10, y=140)
     
-    test_button = tk.Button(root, text="TEST", command=lambda:[check_if_file_selected()])
-    test_button.place(x=530, y=230)
+    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()])
+    open_links_button.place(x=530, y=230)
 
     root.mainloop()
     
 
 draw_gui()
-#test_filter_by_domain()
-#test_filter_by_lines()
-#test_filter_phrase()
-#print_test_file()
