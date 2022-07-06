@@ -364,6 +364,7 @@ def draw_gui():
         for l in link_list:
             webbrowser.get(browser).open_new_tab(l[0])
             time.sleep(delay)
+        check_checkboxes()
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
