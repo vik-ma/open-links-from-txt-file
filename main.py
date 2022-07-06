@@ -361,8 +361,8 @@ def draw_gui():
     def open_links(link_list):
         browser = config.get("BROWSER_PATHS", browser_selection.get()) + " %s"
         delay = int(config.get("USERCONFIG", "delay"))/1000
-        for l in link_list:
-            webbrowser.get(browser).open_new_tab(l[0])
+        for link in link_list:
+            webbrowser.get(browser).open_new_tab(link[0])
             time.sleep(delay)
         check_checkboxes()
 
