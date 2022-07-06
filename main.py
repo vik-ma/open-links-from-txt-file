@@ -215,6 +215,12 @@ def draw_gui():
         if selected_file.get() == "No File Selected":
             messagebox.showerror("Error", "Must select a text file to read from first!")
         else:
+            check_if_browser_added()
+
+    def check_if_browser_added():
+        if browser_selection.get() == "No Browser Added":
+            messagebox.showerror("Error", "Must add a path to a browser first!")
+        else:
             validate_input()
 
     browser_label = tk.Label(root, text="Open In Browser:", font="Bold")
@@ -338,6 +344,12 @@ def draw_gui():
                         messagebox.showerror("Error", error_msg)
                     except ValueError:                                          #Catches non-integer values
                         messagebox.showerror("Error", error_msg)
+
+    def open_links(filter_list):
+        if len(filter_list) >= config.get("USERCONFIG", "batch_warning"):
+            msgbox_warning = messagebox.askquestion("Warning", f"You are about to open {len(filter_list)} links. Proceed?")
+            if msgbox_warning == "yes":
+                pass
 
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
