@@ -364,7 +364,9 @@ def draw_gui():
         for link in link_list:
             webbrowser.get(browser).open_new_tab(link[0])
             time.sleep(delay)
-        check_checkboxes()
+        if close_check.get() is True:
+            check_checkboxes()
+            close()
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
@@ -396,9 +398,7 @@ def draw_gui():
         if config.get("USERCONFIG", "autoclose") != close_check.get():
             set_autoclose(close_check.get()) 
         if config.get("USERCONFIG", "opentxtfile") != open_txt_check.get():
-            set_opentxtfile(open_txt_check.get())  
-        if close_check.get() is True:
-            close()
+            set_opentxtfile(open_txt_check.get()) 
 
     close_check = tk.BooleanVar()
     close_check.set(config.get("USERCONFIG", "autoclose"))
@@ -439,7 +439,9 @@ def draw_gui():
     def close():
         root.destroy()
 
-    
+    #Updates checkboxes when closing. Executes second command after first one.
+    root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
+
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
     restore_default_button.place(x=10, y=175)
 
