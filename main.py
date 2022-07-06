@@ -314,7 +314,7 @@ def draw_gui():
                 case "Phrase":
                     try:
                         if filter_by_phrase(file, filtervalue) != []:
-                            open_links(filter_by_phrase(file, filtervalue))
+                            check_batch_warning(filter_by_phrase(file, filtervalue))
                         else:
                             messagebox.showerror("Error", f"No phrase '{filtervalue}' in file!")
                     except Exception as e:                                      #Might never catch anything
@@ -323,7 +323,7 @@ def draw_gui():
                 case "Domain":
                     try:
                         if filter_by_domain(file, filtervalue) != []:
-                            open_links(filter_by_domain(file, filtervalue))
+                            check_batch_warning(filter_by_domain(file, filtervalue))
                         else:
                             messagebox.showerror("Error", f"No URL containing '{filtervalue}' in file!")
                     except Exception as e:                                      #Might never catch anything
@@ -339,15 +339,15 @@ def draw_gui():
                         if int(line_index[0]) < 1 or int(line_index[1]) < 1:    #Check if start or end index is 0 or below
                             messagebox.showerror("Error", error_msg)
                             return
-                        open_links(filter_by_lines(file, int(line_index[0]), int(line_index[1])))  
+                        check_batch_warning(filter_by_lines(file, int(line_index[0]), int(line_index[1])))  
                     except IndexError:                                          #Catches out of bounds indices
                         messagebox.showerror("Error", error_msg)
                     except ValueError:                                          #Catches non-integer values
                         messagebox.showerror("Error", error_msg)
         else:
-            open_links(file)
+            check_batch_warning(file)
 
-    def open_links(filter_list):
+    def check_batch_warning(filter_list):
             if [] in filter_list:
                 filter_list.remove([])
             if len(filter_list) >= int(config.get("USERCONFIG", "batch_warning")):
