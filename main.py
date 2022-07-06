@@ -347,17 +347,23 @@ def draw_gui():
         else:
             check_batch_warning(file)
 
-    def check_batch_warning(filter_list):
-        if [] in filter_list:
-            filter_list.remove([])
+    def check_batch_warning(link_list):
+        if [] in link_list:
+            link_list.remove([])
         batch_warning = int(config.get("USERCONFIG", "batch_warning"))
-        if len(filter_list) >= batch_warning and batch_warning != 0:
-            msgbox_warning = messagebox.askquestion("Warning", f"You are about to open {len(filter_list)} links. Proceed?")
+        if len(link_list) >= batch_warning and batch_warning != 0:
+            msgbox_warning = messagebox.askquestion("Warning", f"You are about to open {len(link_list)} links. Proceed?")
             if msgbox_warning == "yes":
-                print(filter_list)
+                open_links(link_list)
         else:
-            print(filter_list)
+            open_links(link_list)
 
+    def open_links(link_list):
+        browser = config.get("BROWSER_PATHS", browser_selection.get()) + " %s"
+        delay = int(config.get("USERCONFIG", "delay"))/1000
+        for l in link_list:
+            webbrowser.get(browser).open_new_tab(l[0])
+            time.sleep(delay)
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=10, y=240)
