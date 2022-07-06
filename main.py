@@ -314,20 +314,20 @@ def draw_gui():
                 case "Phrase":
                     try:
                         if filter_by_phrase(file, filtervalue) != []:
-                            print(filter_by_phrase(file, filtervalue))
+                            open_links(filter_by_phrase(file, filtervalue))
                         else:
                             messagebox.showerror("Error", f"No phrase '{filtervalue}' in file!")
                     except Exception as e:                                      #Might never catch anything
-                        messagebox.showerror(e)
+                        messagebox.showerror("Error", e)
 
                 case "Domain":
                     try:
                         if filter_by_domain(file, filtervalue) != []:
-                            print(filter_by_domain(file, filtervalue))
+                            open_links(filter_by_domain(file, filtervalue))
                         else:
                             messagebox.showerror("Error", f"No URL containing '{filtervalue}' in file!")
                     except Exception as e:                                      #Might never catch anything
-                        messagebox.showerror(e)
+                        messagebox.showerror("Error", e)
 
                 case "Lines":
                     line_index = filtervalue.split(",")
@@ -339,17 +339,23 @@ def draw_gui():
                         if int(line_index[0]) < 1 or int(line_index[1]) < 1:    #Check if start or end index is 0 or below
                             messagebox.showerror("Error", error_msg)
                             return
-                        print(filter_by_lines(file, int(line_index[0]), int(line_index[1])))  
+                        open_links(filter_by_lines(file, int(line_index[0]), int(line_index[1])))  
                     except IndexError:                                          #Catches out of bounds indices
                         messagebox.showerror("Error", error_msg)
                     except ValueError:                                          #Catches non-integer values
                         messagebox.showerror("Error", error_msg)
+        else:
+            open_links(file)
 
     def open_links(filter_list):
-        if len(filter_list) >= config.get("USERCONFIG", "batch_warning"):
-            msgbox_warning = messagebox.askquestion("Warning", f"You are about to open {len(filter_list)} links. Proceed?")
-            if msgbox_warning == "yes":
-                pass
+            if [] in filter_list:
+                filter_list.remove([])
+            if len(filter_list) >= int(config.get("USERCONFIG", "batch_warning")):
+                msgbox_warning = messagebox.askquestion("Warning", f"You are about to open {len(filter_list)} links. Proceed?")
+                if msgbox_warning == "yes":
+                    print(filter_list)
+            else:
+                 print(filter_list)
 
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
