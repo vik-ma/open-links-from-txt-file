@@ -88,7 +88,7 @@ def set_savetxt(value):
     write_config()
 
 def set_savedtxtpath(path):
-    config.set("USERCONFIG", "savedtxtpath", path)
+    config.set("USERCONFIG", "savedtxtpath", str(path))
     write_config()
 
 def open_file_in_default_editor(filename):
@@ -406,7 +406,11 @@ def draw_gui():
     save_txt_check.set(config.get("USERCONFIG", "savetxt"))
     save_txt_checkbox = tk.Checkbutton(root, text="Remember file next time program is opened", variable=save_txt_check, onvalue=True, offvalue=False)
     save_txt_checkbox.place(x=450, y=200)
+
     
+    if save_txt_check.get() is True:
+        selected_file.set(config.get("USERCONFIG", "savedtxtpath"))
+
     testlabel = tk.Label(root)
     testlabel.place(x=450, y=270)
 
@@ -437,6 +441,10 @@ def draw_gui():
             open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
 
     def close():
+        if save_txt_check.get() is True:
+            set_savedtxtpath(selected_file.get())
+        else:
+            set_savedtxtpath("")
         root.destroy()
 
     #Updates checkboxes when closing. Executes second command after first one.
