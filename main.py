@@ -8,13 +8,13 @@ from configparser import ConfigParser
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
-batch_warning = 20      #Warns when trying to open more than that many links
-delay = 250             #Delay between opening links in milliseconds
-defaultdir = DESKTOP    #Default directory when selecting file
-autoclose = False       #Closes program after opening links if True
-opentxtfile = False     #Opens text file in default text editor if True
-savetxt = False         #Automatically selects saved file on startup if True
-savedtxtpath = ""       #Filepath to the file to be automatically selected
+batch_warning = 20                      #Warns when trying to open more than that many links
+delay = 250                             #Delay between opening links in milliseconds
+defaultdir = DESKTOP                    #Default directory when selecting file
+autoclose = False                       #Closes program after opening links if True
+opentxtfile = False                     #Opens text file in default text editor if True
+savetxt = False                         #Automatically selects saved file on startup if True
+savedtxtpath = "No File Selected"       #Filepath to the file to be automatically selected
 
 config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
 has_config = pathlib.Path("config.ini").exists()
@@ -439,12 +439,13 @@ def draw_gui():
             reset_variables()
             close_check.set(config.get("USERCONFIG", "autoclose"))
             open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
+            save_txt_check.set(config.get("USERCONFIG", "savetxt"))
 
     def close():
         if save_txt_check.get() is True:
             set_savedtxtpath(selected_file.get())
         else:
-            set_savedtxtpath("")
+            set_savedtxtpath("No File Selected")
         root.destroy()
 
     #Updates checkboxes when closing. Executes second command after first one.
