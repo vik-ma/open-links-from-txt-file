@@ -13,6 +13,8 @@ delay = 250             #Delay between opening links in milliseconds
 defaultdir = DESKTOP    #Default directory when selecting file
 autoclose = False       #Closes program after opening links if True
 opentxtfile = False     #Opens text file in default text editor if True
+savetxt = False
+savedtxtpath = ""
 
 config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
 has_config = pathlib.Path("config.ini").exists()
@@ -28,6 +30,8 @@ if has_config:
     defaultdir = config.get("USERCONFIG", "defaultdir") 
     autoclose = config.get("USERCONFIG", "autoclose")
     opentxtfile = config.get("USERCONFIG", "opentxtfile")
+    savetxt = config.get("USERCONFIG", "savetxt")
+    savedtxtpath = config.get("USERCONFIG", "savedtxtpath")
 
 else:                                               #Creates default config.ini if it doesn't exist
     config.add_section("DEFAULT")
@@ -38,6 +42,8 @@ else:                                               #Creates default config.ini 
         config.set(section, "defaultdir", str(DESKTOP))
         config.set(section, "autoclose", str(autoclose))
         config.set(section, "opentxtfile", str(opentxtfile))
+        config.set(section, "savetxt", str(savetxt))
+        config.set(section, "savedtxtpath", savedtxtpath)
     config.add_section("BROWSER_PATHS")
     write_config()
 
@@ -75,6 +81,14 @@ def set_autoclose(value):
 
 def set_opentxtfile(value):
     config.set("USERCONFIG", "opentxtfile", str(value))
+    write_config()
+
+def set_savetxt(value):
+    config.set("USERCONFIG", "savetxt", str(value))
+    write_config()
+
+def set_savedtxtpath(path):
+    config.set("USERCONFIG", "savedtxtpath", path)
     write_config()
 
 def open_file_in_default_editor(filename):
@@ -375,6 +389,8 @@ def draw_gui():
             set_autoclose(close_check.get()) 
         if config.get("USERCONFIG", "opentxtfile") != open_txt_check.get():
             set_opentxtfile(open_txt_check.get()) 
+        if config.get("USERCONFIG", "savetxt") != save_txt_check.get():
+            set_savetxt(save_txt_check.get())
 
     close_check = tk.BooleanVar()
     close_check.set(config.get("USERCONFIG", "autoclose"))
@@ -385,6 +401,14 @@ def draw_gui():
     open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
     open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
     open_txt_checkbox.place(x=150, y=180)
+
+    save_txt_check = tk.BooleanVar()
+    save_txt_check.set(config.get("USERCONFIG", "savetxt"))
+    save_txt_checkbox = tk.Checkbutton(root, text="Remember file next time program is opened", variable=save_txt_check, onvalue=True, offvalue=False)
+    save_txt_checkbox.place(x=450, y=200)
+    
+    testlabel = tk.Label(root)
+    testlabel.place(x=450, y=270)
 
     def reset_browser_menu():
         """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
