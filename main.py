@@ -185,10 +185,16 @@ def draw_gui():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
     
+    select_file_frame = tk.Frame(height=207, width=410, highlightbackground="black", highlightthickness=1)
+    select_file_frame.place(x=-1, y=-1)
+    settings_frame = tk.Frame(height=98, width=602, highlightbackground="black", highlightthickness=1)
+    settings_frame.place(x=-1, y=203)
+
+
     selected_file = StringVar()
     selected_file.set("No File Selected")
-    selected_file_label = tk.Label(root, textvariable=selected_file)
-    selected_file_label.place(x=350, y=10)
+    selected_file_label = tk.Label(root, textvariable=selected_file, fg="#3a6de0", font="bold")
+    selected_file_label.place(x=8, y=55)
 
     def select_file():
         filename = filedialog.askopenfilename(initialdir=config.get("USERCONFIG", "defaultdir"), title="Select File", 
@@ -199,7 +205,7 @@ def draw_gui():
             selected_file.set(filename)
 
     select_file_button = tk.Button(root, text="Select Text File", command=select_file, font="Bold")
-    select_file_button.place(x=185, y=10)
+    select_file_button.place(x=8, y=10)
 
     def check_if_file_selected():
         if selected_file.get() == "No File Selected":
@@ -214,45 +220,44 @@ def draw_gui():
             validate_input()
 
     browser_label = tk.Label(root, text="Open In Browser:", font="Bold")
-    browser_label.place(x=12, y=10)
+    browser_label.place(x=415, y=70)
     browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
     browser_menu.configure(font="Bold")
-    browser_menu.place(x=10, y=35)
+    browser_menu.place(x=413, y=95)
 
     select_filter_label = tk.Label(root, text="Select Filter:", font="Bold")
-    select_filter_label.place(x=185, y=50)
-
-    
+    select_filter_label.place(x=8, y=86)
 
     filter_phrase_label = tk.Label(root, text="Open all lines containing comment phrase:")
-    filter_phrase_label.place(x=185, y=75)
+    filter_phrase_label.place(x=8, y=115)
     filter_domain_label = tk.Label(root, text="Open all lines containing URL:")
-    filter_domain_label.place(x=185, y=105)
+    filter_domain_label.place(x=8, y=145)
     filter_line_label = tk.Label(root, text="Open all lines in range (Start/End):")
-    filter_line_label.place(x=185, y=135)
+    filter_line_label.place(x=8, y=175)
 
     set_phrase_filter = tk.Entry(root, width=20)
-    set_phrase_filter.place(x=405, y=76)
+    set_phrase_filter.place(x=243, y=116)
     set_domain_filter = tk.Entry(root, width=20)
-    set_domain_filter.place(x=405, y=106)
+    set_domain_filter.place(x=243, y=146)
     set_line_filter_start = tk.Entry(root, width=5)
     set_line_filter_end = tk.Entry(root, width=5)
-    set_line_filter_start.place(x=405, y=136)
-    set_line_filter_end.place(x=445, y=136)
+    set_line_filter_start.place(x=243, y=176)
+    set_line_filter_end.place(x=283, y=176)
 
     current_filter = StringVar()
     current_filter.set("Open All Lines In Document (No Filter Set)")
     display_filter = tk.Label(root, textvariable=current_filter)
-    display_filter.place(x=350, y=30)
+    display_filter.place(x=100, y=88)
 
     set_phrase_filter_button = tk.Button(root, text="Set", command=lambda:[apply_phrase_filter(set_phrase_filter.get())])
-    set_phrase_filter_button.place(x=535, y=73)
+    set_phrase_filter_button.place(x=373, y=113)
     set_domain_filter_button = tk.Button(root, text="Set", command=lambda:[apply_domain_filter(set_domain_filter.get())])
-    set_domain_filter_button.place(x=535, y=103)
+    set_domain_filter_button.place(x=373, y=143)
     set_line_filter_button = tk.Button(root, text="Set", command=lambda:[apply_line_filter(set_line_filter_start.get(), set_line_filter_end.get())])
-    set_line_filter_button.place(x=535, y=133)
-    set_no_filter_button = tk.Button(root, text="Reset Filter", command=lambda:[reset_filter()])
-    set_no_filter_button.place(x=495, y=163)
+    set_line_filter_button.place(x=373, y=173)
+
+    reset_filter_button = tk.Button(root, text="Reset Filter", command=lambda:[reset_filter()])
+    reset_filter_button.place(x=332, y=83)
 
     
 
@@ -272,7 +277,7 @@ def draw_gui():
 
     def apply_line_filter(start, end):
         if start != "" and end != "":
-            current_filter.set(f"Open Lines {start} - {end}")
+            current_filter.set(f"Open Lines {start}-{end}")
             current_filter_type.set("Lines")
             current_filter_value.set(str(start)+","+str(end))
             clear_filter_entries()
@@ -359,30 +364,30 @@ def draw_gui():
             close()
 
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
-    warning_label.place(x=10, y=240)
+    warning_label.place(x=155, y=240)
 
     change_warning = tk.Entry(root, width=5)
-    change_warning.place(x=325, y=241)
+    change_warning.place(x=500, y=241)
     change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
 
     delay_label = tk.Label(root, text="Delay between opening links (In milliseconds):")
-    delay_label.place(x=10, y=270)
+    delay_label.place(x=155, y=270)
 
     change_delay = tk.Entry(root, width=5)
-    change_delay.place(x=325, y=271)
+    change_delay.place(x=500, y=271)
     change_delay.insert(0, config.get("USERCONFIG", "delay"))
 
     defaultdir_get = StringVar()
     defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))
     defaultdir_label = tk.Label(root, textvariable=defaultdir_get)
-    defaultdir_label.place(x=10, y=210)
+    defaultdir_label.place(x=155, y=210)
 
     set_warning_button = tk.Button(root, text="Change", command=lambda:[set_batch_warning(change_warning.get()), reset_variables()])
-    set_warning_button.place(x=365, y=236)
+    set_warning_button.place(x=542, y=238)
     set_delay_button = tk.Button(root, text="Change", command=lambda:[set_delay(change_delay.get()), reset_variables()])
-    set_delay_button.place(x=365, y=266)
+    set_delay_button.place(x=542, y=268)
     set_defaultdir_button = tk.Button(root, text="Change", command=lambda:[set_default_dir(), reset_variables()])
-    set_defaultdir_button.place(x=365, y=206)
+    set_defaultdir_button.place(x=542, y=208)
 
     def check_checkboxes(): 
         if config.get("USERCONFIG", "autoclose") != close_check.get():
@@ -395,24 +400,22 @@ def draw_gui():
     close_check = tk.BooleanVar()
     close_check.set(config.get("USERCONFIG", "autoclose"))
     autoclose_checkbox = tk.Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
-    autoclose_checkbox.place(x=150, y=160)
+    autoclose_checkbox.place(x=412, y=42)
 
     open_txt_check = tk.BooleanVar()
     open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
     open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
-    open_txt_checkbox.place(x=150, y=180)
+    open_txt_checkbox.place(x=135, y=5)
 
     save_txt_check = tk.BooleanVar()
     save_txt_check.set(config.get("USERCONFIG", "savetxt"))
     save_txt_checkbox = tk.Checkbutton(root, text="Remember file next time program is opened", variable=save_txt_check, onvalue=True, offvalue=False)
-    save_txt_checkbox.place(x=450, y=200)
+    save_txt_checkbox.place(x=135, y=25)
 
     
     if save_txt_check.get() is True:
         selected_file.set(config.get("USERCONFIG", "savedtxtpath"))
 
-    testlabel = tk.Label(root)
-    testlabel.place(x=450, y=270)
 
     def reset_browser_menu():
         """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
@@ -452,19 +455,21 @@ def draw_gui():
     root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
 
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
-    restore_default_button.place(x=10, y=175)
+    restore_default_button.place(x=8, y=265)
 
-    add_remove_browser_label = tk.Label(root, text="Add/Remove Browser Path:")
-    add_remove_browser_label.place(x=10, y=87)
+    #add_remove_browser_label = tk.Label(root, text="Add/Remove Browser Path:")
+    #add_remove_browser_label.place(x=415, y=121)
 
-    add_browser_button = tk.Button(root, text="Add Browser", command=lambda:[add_browser_path(), reset_browser_menu()])
-    add_browser_button.place(x=10, y=110)
+    add_browser_button = tk.Button(root, text="Add Browser Path", command=lambda:[add_browser_path(), reset_browser_menu()])
+    add_browser_button.place(x=415, y=143)
 
-    del_browser_button = tk.Button(root, text="Remove Browser", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
-    del_browser_button.place(x=10, y=140)
+    del_browser_button = tk.Button(root, text="Remove Browser Path", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
+    del_browser_button.place(x=415, y=173)
     
-    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()])
-    open_links_button.place(x=530, y=230)
+    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="BOLD", bg="#2de343", fg="white")
+    open_links_button.place(x=415, y=8)
+
+
 
     root.mainloop()
     
