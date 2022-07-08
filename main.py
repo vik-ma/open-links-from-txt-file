@@ -193,7 +193,7 @@ def draw_gui():
 
     selected_file = StringVar()
     selected_file.set("No File Selected")
-    selected_file_label = tk.Label(root, textvariable=selected_file, fg="#b002fa", font="bold")
+    selected_file_label = tk.Label(root, textvariable=selected_file, fg="#db005f", font="bold")
     selected_file_label.place(x=8, y=55)
 
     def select_file():
@@ -246,7 +246,7 @@ def draw_gui():
 
     current_filter = StringVar()
     current_filter.set("Open All Lines In Document (No Filter Set)")
-    display_filter = tk.Label(root, textvariable=current_filter, fg="#b002fa")
+    display_filter = tk.Label(root, textvariable=current_filter, fg="#db005f")
     display_filter.place(x=53, y=88)
 
     set_phrase_filter_button = tk.Button(root, text="Set", command=lambda:[apply_phrase_filter(set_phrase_filter.get())])
@@ -466,7 +466,7 @@ def draw_gui():
     del_browser_button = tk.Button(root, text="Remove Browser Path", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=415, y=173)
     
-    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="BOLD", bg="#0adb07", fg="#1c1c1c", width=19)
+    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="BOLD", bg="#05f040", fg="black", width=19)
     open_links_button.place(x=415, y=8)
 
     help_button = tk.Button(root, text="Help", command="")
