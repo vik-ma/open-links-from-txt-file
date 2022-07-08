@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import BooleanVar, StringVar, filedialog, Text, messagebox, Label
+from tkinter import BooleanVar, StringVar, filedialog, Text, messagebox, Label, Toplevel
 import pathlib
 import os
 import webbrowser
@@ -454,8 +454,11 @@ def draw_gui():
     #Updates checkboxes when closing. Executes second command after first one.
     root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
 
+    def helpwindow():
+        messagebox.showinfo("Help","")
+
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
-    restore_default_button.place(x=8, y=265)
+    restore_default_button.place(x=10, y=265)
 
     #add_remove_browser_label = tk.Label(root, text="Add/Remove Browser Path:")
     #add_remove_browser_label.place(x=415, y=121)
@@ -469,8 +472,8 @@ def draw_gui():
     open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#02f25a", fg="#242424", width=17)
     open_links_button.place(x=415, y=8)
 
-    help_button = tk.Button(root, text="Help", command="", font="arial 13 bold")
-    help_button.place(x=8, y=212)
+    help_button = tk.Button(root, text="Help", command=helpwindow, font="arial 13 bold")
+    help_button.place(x=10, y=212)
 
     root.mainloop()
     
