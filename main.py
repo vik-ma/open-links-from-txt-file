@@ -469,7 +469,8 @@ def draw_gui():
     open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="BOLD", bg="#2de343", fg="white")
     open_links_button.place(x=415, y=8)
 
-
+    help_button = tk.Button(root, text="Help", command="")
+    help_button.place(x=8, y=210)
 
     root.mainloop()
     
