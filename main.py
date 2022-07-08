@@ -193,7 +193,7 @@ def draw_gui():
 
     selected_file = StringVar()
     selected_file.set("No File Selected")
-    selected_file_label = tk.Label(root, textvariable=selected_file, fg="#db005f", font="bold")
+    selected_file_label = tk.Label(root, textvariable=selected_file, fg="#166edb")
     selected_file_label.place(x=8, y=55)
 
     def select_file():
@@ -204,7 +204,7 @@ def draw_gui():
                 open_file_in_default_editor(filename)
             selected_file.set(filename)
 
-    select_file_button = tk.Button(root, text="Select Text File", command=select_file, font="Bold")
+    select_file_button = tk.Button(root, text="Select Text File", command=select_file, font="arial 13 bold", bg="#318fd6", fg="#1c1c1c")
     select_file_button.place(x=8, y=10)
 
     def check_if_file_selected():
@@ -219,13 +219,13 @@ def draw_gui():
         else:
             validate_input()
 
-    browser_label = tk.Label(root, text="Open In Browser:", font="Bold")
-    browser_label.place(x=415, y=70)
+    browser_label = tk.Label(root, text="Open In Browser:", font="arial 13 bold")
+    browser_label.place(x=415, y=75)
     browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
-    browser_menu.configure(font="Bold")
-    browser_menu.place(x=413, y=95)
+    browser_menu.configure(font="arial 11 bold")
+    browser_menu.place(x=413, y=100)
 
-    select_filter_label = tk.Label(root, text="Filter:", font="Bold")
+    select_filter_label = tk.Label(root, text="Filter:", font="arial 13 bold")
     select_filter_label.place(x=8, y=86)
 
     filter_phrase_label = tk.Label(root, text="Open all lines containing comment phrase:")
@@ -246,8 +246,8 @@ def draw_gui():
 
     current_filter = StringVar()
     current_filter.set("Open All Lines In Document (No Filter Set)")
-    display_filter = tk.Label(root, textvariable=current_filter, fg="#db005f")
-    display_filter.place(x=53, y=88)
+    display_filter = tk.Label(root, textvariable=current_filter, fg="#166edb")
+    display_filter.place(x=60, y=88)
 
     set_phrase_filter_button = tk.Button(root, text="Set", command=lambda:[apply_phrase_filter(set_phrase_filter.get())])
     set_phrase_filter_button.place(x=373, y=113)
@@ -405,12 +405,12 @@ def draw_gui():
     open_txt_check = tk.BooleanVar()
     open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
     open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
-    open_txt_checkbox.place(x=135, y=5)
+    open_txt_checkbox.place(x=145, y=5)
 
     save_txt_check = tk.BooleanVar()
     save_txt_check.set(config.get("USERCONFIG", "savetxt"))
     save_txt_checkbox = tk.Checkbutton(root, text="Remember file next time program is opened", variable=save_txt_check, onvalue=True, offvalue=False)
-    save_txt_checkbox.place(x=135, y=25)
+    save_txt_checkbox.place(x=145, y=25)
 
     
     if save_txt_check.get() is True:
@@ -466,10 +466,10 @@ def draw_gui():
     del_browser_button = tk.Button(root, text="Remove Browser Path", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=415, y=173)
     
-    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="BOLD", bg="#05f040", fg="black", width=19)
+    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#05f040", fg="#242424", width=17)
     open_links_button.place(x=415, y=8)
 
-    help_button = tk.Button(root, text="Help", command="")
+    help_button = tk.Button(root, text="Help", command="", font="arial 13 bold")
     help_button.place(x=8, y=210)
 
     root.mainloop()
