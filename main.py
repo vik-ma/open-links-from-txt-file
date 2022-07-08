@@ -466,7 +466,7 @@ def draw_gui():
     del_browser_button = tk.Button(root, text="Remove Browser Path", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=415, y=173)
     
-    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="BOLD", bg="#0adb07", fg="#383838", width=19)
+    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="BOLD", bg="#0adb07", fg="#1c1c1c", width=19)
     open_links_button.place(x=415, y=8)
 
     help_button = tk.Button(root, text="Help", command="")
