@@ -193,7 +193,7 @@ def draw_gui():
 
     selected_file = StringVar()
     selected_file.set("No File Selected")
-    selected_file_label = tk.Label(root, textvariable=selected_file, fg="#3a6de0", font="bold")
+    selected_file_label = tk.Label(root, textvariable=selected_file, fg="#b002fa", font="bold")
     selected_file_label.place(x=8, y=55)
 
     def select_file():
@@ -225,7 +225,7 @@ def draw_gui():
     browser_menu.configure(font="Bold")
     browser_menu.place(x=413, y=95)
 
-    select_filter_label = tk.Label(root, text="Select Filter:", font="Bold")
+    select_filter_label = tk.Label(root, text="Filter:", font="Bold")
     select_filter_label.place(x=8, y=86)
 
     filter_phrase_label = tk.Label(root, text="Open all lines containing comment phrase:")
@@ -246,8 +246,8 @@ def draw_gui():
 
     current_filter = StringVar()
     current_filter.set("Open All Lines In Document (No Filter Set)")
-    display_filter = tk.Label(root, textvariable=current_filter)
-    display_filter.place(x=100, y=88)
+    display_filter = tk.Label(root, textvariable=current_filter, fg="#b002fa")
+    display_filter.place(x=53, y=88)
 
     set_phrase_filter_button = tk.Button(root, text="Set", command=lambda:[apply_phrase_filter(set_phrase_filter.get())])
     set_phrase_filter_button.place(x=373, y=113)
