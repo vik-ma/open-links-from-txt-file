@@ -204,7 +204,7 @@ def draw_gui():
                 open_file_in_default_editor(filename)
             selected_file.set(filename)
 
-    select_file_button = tk.Button(root, text="Select Text File", command=select_file, font="arial 13 bold", bg="#318fd6", fg="#1c1c1c")
+    select_file_button = tk.Button(root, text="Select Text File", command=select_file, font="arial 13 bold", bg="#3599e6", fg="#1c1c1c")
     select_file_button.place(x=8, y=10)
 
     def check_if_file_selected():
@@ -466,11 +466,11 @@ def draw_gui():
     del_browser_button = tk.Button(root, text="Remove Browser Path", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=415, y=173)
     
-    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#05f040", fg="#242424", width=17)
+    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#02f26a", fg="#242424", width=17)
     open_links_button.place(x=415, y=8)
 
     help_button = tk.Button(root, text="Help", command="", font="arial 13 bold")
-    help_button.place(x=8, y=210)
+    help_button.place(x=8, y=212)
 
     root.mainloop()
     
