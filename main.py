@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import BooleanVar, StringVar, filedialog, Text, messagebox, Label, Toplevel
+from tkinter import BooleanVar, StringVar, filedialog, Text, messagebox, Label
 import pathlib
 import os
 import webbrowser
@@ -211,16 +211,20 @@ def draw_gui():
     select_file_button.place(x=8, y=10)
 
     def check_if_file_selected():
-        if selected_file.get() == "No File Selected":
-            messagebox.showerror("Error", "Must select a text file to read from first!")
-        else:
-            check_if_browser_added()
+        try:
+            if selected_file.get() == "No File Selected":
+                messagebox.showerror("Error", "Must select a text file to read from first!")
+            else:
+                check_if_browser_added()
+        except:
+            messagebox.showerror("Error", "Target file can not be read! Select a valid text file.")
 
     def check_if_browser_added():
         if browser_selection.get() == "No Browser Added":
             messagebox.showerror("Error", "Must add a path to a browser first!")
         else:
             validate_input()
+            
 
     browser_label = tk.Label(root, text="Open In Browser:", font="arial 13 bold")
     browser_label.place(x=415, y=75)
@@ -366,6 +370,7 @@ def draw_gui():
             check_checkboxes()
             close()
 
+
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=155, y=240)
 
@@ -458,7 +463,7 @@ def draw_gui():
     root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
 
     def helpwindow():
-        messagebox.showinfo("Help", "Add the path to the browser you want to use by clicking the 'Add Browser Path' button and then locate the .exe file of the browser on your system. You can add multiple browsers and the paths will be stored in the 'config.ini' file.\n\nSelect a text file to read from. The script will open the first entry of every line up until the first space or tab. Everything after the space is considered as a comment. Empty lines are not considered an entry.\n\nSet a filter only open specific lines of the text document.")
+        messagebox.showinfo("Help", "Add the path to the browser you want to use by clicking the 'Add Browser Path' button and then locate the .exe file of the browser on your system. You can add multiple browsers and the paths will be stored in the 'config.ini' file.\n\nSelect a text file to read from. The script will open the first entry of every line up until the first space or tab. Everything after the space is considered as a comment. Empty lines are not considered an entry.\n\nSet a filter only open specific lines in the text document.\n\nIf the script fails to execute, the added browser is not valid.")
 
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
     restore_default_button.place(x=10, y=265)
