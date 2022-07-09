@@ -193,7 +193,6 @@ def draw_gui():
     settings_frame = tk.Frame(height=98, width=602, highlightbackground="black", highlightthickness=1)
     settings_frame.place(x=-1, y=203)
 
-
     selected_file = StringVar()
     selected_file.set("No File Selected")
     selected_file_label = tk.Label(root, textvariable=selected_file, fg="#166edb")
@@ -210,30 +209,13 @@ def draw_gui():
     select_file_button = tk.Button(root, text="Select Text File", command=select_file, font="arial 13 bold", bg="#3599e6", fg="#1c1c1c")
     select_file_button.place(x=8, y=10)
 
-    def check_if_file_selected():
-        try:
-            if selected_file.get() == "No File Selected":
-                messagebox.showerror("Error", "Must select a text file to read from first!")
-            else:
-                check_if_browser_added()
-        except:
-            messagebox.showerror("Error", "Target file can not be read! Select a valid text file.")
-
-    def check_if_browser_added():
-        if browser_selection.get() == "No Browser Added":
-            messagebox.showerror("Error", "Must add a path to a browser first!")
-        else:
-            validate_input()
-            
-
-    browser_label = tk.Label(root, text="Open In Browser:", font="arial 13 bold")
-    browser_label.place(x=415, y=75)
-    browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
-    browser_menu.configure(font="arial 11 bold")
-    browser_menu.place(x=413, y=100)
-
     select_filter_label = tk.Label(root, text="Filter:", font="arial 13 bold")
     select_filter_label.place(x=8, y=86)
+
+    current_filter = StringVar()
+    current_filter.set("Open All Lines In Document (No Filter Set)")
+    display_filter = tk.Label(root, textvariable=current_filter, fg="#166edb")
+    display_filter.place(x=60, y=88)
 
     filter_phrase_label = tk.Label(root, text="Open all lines containing comment phrase:")
     filter_phrase_label.place(x=8, y=115)
@@ -244,29 +226,20 @@ def draw_gui():
 
     set_phrase_filter = tk.Entry(root, width=20)
     set_phrase_filter.place(x=243, y=116)
+    set_phrase_filter_button = tk.Button(root, text="Set", command=lambda:[apply_phrase_filter(set_phrase_filter.get())])
+    set_phrase_filter_button.place(x=373, y=113)  
+
     set_domain_filter = tk.Entry(root, width=20)
     set_domain_filter.place(x=243, y=146)
+    set_domain_filter_button = tk.Button(root, text="Set", command=lambda:[apply_domain_filter(set_domain_filter.get())])
+    set_domain_filter_button.place(x=373, y=143)
+
     set_line_filter_start = tk.Entry(root, width=5)
     set_line_filter_end = tk.Entry(root, width=5)
     set_line_filter_start.place(x=243, y=176)
     set_line_filter_end.place(x=283, y=176)
-
-    current_filter = StringVar()
-    current_filter.set("Open All Lines In Document (No Filter Set)")
-    display_filter = tk.Label(root, textvariable=current_filter, fg="#166edb")
-    display_filter.place(x=60, y=88)
-
-    set_phrase_filter_button = tk.Button(root, text="Set", command=lambda:[apply_phrase_filter(set_phrase_filter.get())])
-    set_phrase_filter_button.place(x=373, y=113)
-    set_domain_filter_button = tk.Button(root, text="Set", command=lambda:[apply_domain_filter(set_domain_filter.get())])
-    set_domain_filter_button.place(x=373, y=143)
     set_line_filter_button = tk.Button(root, text="Set", command=lambda:[apply_line_filter(set_line_filter_start.get(), set_line_filter_end.get())])
     set_line_filter_button.place(x=373, y=173)
-
-    reset_filter_button = tk.Button(root, text="Reset Filter", command=lambda:[reset_filter()])
-    reset_filter_button.place(x=332, y=83)
-
-    
 
     def apply_phrase_filter(phrase):
         if phrase != "":
@@ -289,6 +262,12 @@ def draw_gui():
             current_filter_value.set(str(start)+","+str(end))
             clear_filter_entries()
 
+    current_filter_type = StringVar()
+    current_filter_value = StringVar()
+
+    reset_filter_button = tk.Button(root, text="Reset Filter", command=lambda:[reset_filter()])
+    reset_filter_button.place(x=332, y=83)
+    
     def reset_filter():
         current_filter.set("Open All Lines In Document (No Filter Set)")
         current_filter_type.set("")
@@ -304,9 +283,24 @@ def draw_gui():
         set_line_filter_start.insert(0, "")
         set_line_filter_end.delete(0, tk.END)
         set_line_filter_end.insert(0, "")
+    
+    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#02f25a", fg="#242424", width=17)
+    open_links_button.place(x=415, y=8)
+    
+    def check_if_file_selected():
+        try:
+            if selected_file.get() == "No File Selected":
+                messagebox.showerror("Error", "Must select a text file to read from first!")
+            else:
+                check_if_browser_added()
+        except:
+            messagebox.showerror("Error", "Target file can not be read! Select a valid text file.")
 
-    current_filter_type = StringVar()
-    current_filter_value = StringVar()
+    def check_if_browser_added():
+        if browser_selection.get() == "No Browser Added":
+            messagebox.showerror("Error", "Must add a path to a browser first!")
+        else:
+            validate_input()
 
     def validate_input():
         filtertype, filtervalue = current_filter_type.get(), current_filter_value.get()
@@ -347,7 +341,7 @@ def draw_gui():
                     except ValueError:                                          #Catches non-integer values
                         messagebox.showerror("Error", error_msg)
         else:
-            check_batch_warning(file)
+            check_batch_warning(file)        
 
     def check_batch_warning(link_list):
         if [] in link_list:
@@ -370,46 +364,6 @@ def draw_gui():
             check_checkboxes()
             close()
 
-
-    warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
-    warning_label.place(x=155, y=240)
-
-    change_warning = tk.Entry(root, width=5)
-    change_warning.place(x=500, y=241)
-    change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
-
-    delay_label = tk.Label(root, text="Delay between opening links (In milliseconds):")
-    delay_label.place(x=155, y=270)
-
-    change_delay = tk.Entry(root, width=5)
-    change_delay.place(x=500, y=271)
-    change_delay.insert(0, config.get("USERCONFIG", "delay"))
-
-    defaultdir_get = StringVar()
-    defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))
-    defaultdir_label = tk.Label(root, textvariable=defaultdir_get)
-    defaultdir_label.place(x=155, y=210)
-
-    set_warning_button = tk.Button(root, text="Change", command=lambda:[set_batch_warning(change_warning.get()), reset_variables()])
-    set_warning_button.place(x=542, y=238)
-    set_delay_button = tk.Button(root, text="Change", command=lambda:[set_delay(change_delay.get()), reset_variables()])
-    set_delay_button.place(x=542, y=268)
-    set_defaultdir_button = tk.Button(root, text="Change", command=lambda:[set_default_dir(), reset_variables()])
-    set_defaultdir_button.place(x=542, y=208)
-
-    def check_checkboxes(): 
-        if config.get("USERCONFIG", "autoclose") != close_check.get():
-            set_autoclose(close_check.get()) 
-        if config.get("USERCONFIG", "opentxtfile") != open_txt_check.get():
-            set_opentxtfile(open_txt_check.get()) 
-        if config.get("USERCONFIG", "savetxt") != save_txt_check.get():
-            set_savetxt(save_txt_check.get())
-
-    close_check = tk.BooleanVar()
-    close_check.set(config.get("USERCONFIG", "autoclose"))
-    autoclose_checkbox = tk.Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
-    autoclose_checkbox.place(x=412, y=42)
-
     open_txt_check = tk.BooleanVar()
     open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
     open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
@@ -420,10 +374,83 @@ def draw_gui():
     save_txt_checkbox = tk.Checkbutton(root, text="Remember file next time program is opened", variable=save_txt_check, onvalue=True, offvalue=False)
     save_txt_checkbox.place(x=145, y=25)
 
-    
     if save_txt_check.get() is True:
         selected_file.set(config.get("USERCONFIG", "savedtxtpath"))
 
+    def helpwindow():
+        messagebox.showinfo("Help", "Add the path to the browser you want to use by clicking the 'Add Browser Path' button and then locate the .exe file of the browser on your system. You can add multiple browsers and the paths will be stored in the 'config.ini' file.\n\nSelect a text file to read from. The script will open the first entry of every line up until the first space or tab. Everything after the space is considered as a comment. Empty lines are not considered an entry.\n\nSet a filter only open specific lines in the text document.\n\nIf the script fails to execute, the added browser is not valid.")
+
+    help_button = tk.Button(root, text="Help", command=helpwindow, font="arial 13 bold")
+    help_button.place(x=10, y=212)
+
+    
+    defaultdir_get = StringVar()
+    defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))
+    defaultdir_label = tk.Label(root, textvariable=defaultdir_get)
+    defaultdir_label.place(x=155, y=210)
+    set_defaultdir_button = tk.Button(root, text="Change", command=lambda:[set_default_dir(), reset_variables()])
+    set_defaultdir_button.place(x=542, y=208)
+
+    warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
+    warning_label.place(x=155, y=240)
+    change_warning = tk.Entry(root, width=5)
+    change_warning.place(x=500, y=241)
+    change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
+    set_warning_button = tk.Button(root, text="Change", command=lambda:[set_batch_warning(change_warning.get()), reset_variables()])
+    set_warning_button.place(x=542, y=238)
+
+    delay_label = tk.Label(root, text="Delay between opening links (In milliseconds):")
+    delay_label.place(x=155, y=270)
+    change_delay = tk.Entry(root, width=5)
+    change_delay.place(x=500, y=271)
+    change_delay.insert(0, config.get("USERCONFIG", "delay"))
+    set_delay_button = tk.Button(root, text="Change", command=lambda:[set_delay(change_delay.get()), reset_variables()])
+    set_delay_button.place(x=542, y=268)
+
+    def restore_default_warning():
+        ask = messagebox.askquestion("Restore Default Config", "Do you really want to reset to default configuration? \nThis can not be undone.")
+        if ask == "yes":
+            restore_default_config()
+            reset_variables()
+            close_check.set(config.get("USERCONFIG", "autoclose"))
+            open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
+            save_txt_check.set(config.get("USERCONFIG", "savetxt"))
+
+    restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
+    restore_default_button.place(x=10, y=265)
+    
+    def reset_variables():
+        defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))        
+        change_warning.delete(0, tk.END)
+        change_delay.delete(0, tk.END)
+        change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
+        change_delay.insert(0, config.get("USERCONFIG", "delay"))
+
+    close_check = tk.BooleanVar()
+    close_check.set(config.get("USERCONFIG", "autoclose"))
+    autoclose_checkbox = tk.Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
+    autoclose_checkbox.place(x=412, y=42)
+
+    def check_checkboxes(): 
+        if config.get("USERCONFIG", "autoclose") != close_check.get():
+            set_autoclose(close_check.get()) 
+        if config.get("USERCONFIG", "opentxtfile") != open_txt_check.get():
+            set_opentxtfile(open_txt_check.get()) 
+        if config.get("USERCONFIG", "savetxt") != save_txt_check.get():
+            set_savetxt(save_txt_check.get())
+
+    browser_label = tk.Label(root, text="Open In Browser:", font="arial 13 bold")
+    browser_label.place(x=415, y=75)
+
+    browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
+    browser_menu.configure(font="arial 11 bold")
+    browser_menu.place(x=413, y=100)
+    
+    add_browser_button = tk.Button(root, text="Add Browser Path", command=lambda:[add_browser_path(), reset_browser_menu()])
+    add_browser_button.place(x=415, y=143)
+
+    del_browser_button = tk.Button(root, text="Remove Browser Path", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
+    del_browser_button.place(x=415, y=173)
 
     def reset_browser_menu():
         #Update the "Select Browser" dropdown menu after a change in the list of added browsers
@@ -436,22 +463,6 @@ def draw_gui():
         for choice in new_choices:
             browser_menu['menu'].add_command(label=choice, command=tk._setit(browser_selection, choice))
 
-    def reset_variables():
-        defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))        
-        change_warning.delete(0, tk.END)
-        change_delay.delete(0, tk.END)
-        change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
-        change_delay.insert(0, config.get("USERCONFIG", "delay"))
-    
-    def restore_default_warning():
-        ask = messagebox.askquestion("Restore Default Config", "Do you really want to reset to default configuration? \nThis can not be undone.")
-        if ask == "yes":
-            restore_default_config()
-            reset_variables()
-            close_check.set(config.get("USERCONFIG", "autoclose"))
-            open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
-            save_txt_check.set(config.get("USERCONFIG", "savetxt"))
-
     def close():
         if save_txt_check.get() is True:
             set_savedtxtpath(selected_file.get())
@@ -462,25 +473,6 @@ def draw_gui():
     #Updates checkboxes when closing. Executes second command after first one.
     root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
 
-    def helpwindow():
-        messagebox.showinfo("Help", "Add the path to the browser you want to use by clicking the 'Add Browser Path' button and then locate the .exe file of the browser on your system. You can add multiple browsers and the paths will be stored in the 'config.ini' file.\n\nSelect a text file to read from. The script will open the first entry of every line up until the first space or tab. Everything after the space is considered as a comment. Empty lines are not considered an entry.\n\nSet a filter only open specific lines in the text document.\n\nIf the script fails to execute, the added browser is not valid.")
-
-    restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
-    restore_default_button.place(x=10, y=265)
-
-    add_browser_button = tk.Button(root, text="Add Browser Path", command=lambda:[add_browser_path(), reset_browser_menu()])
-    add_browser_button.place(x=415, y=143)
-
-    del_browser_button = tk.Button(root, text="Remove Browser Path", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
-    del_browser_button.place(x=415, y=173)
-    
-    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#02f25a", fg="#242424", width=17)
-    open_links_button.place(x=415, y=8)
-
-    help_button = tk.Button(root, text="Help", command=helpwindow, font="arial 13 bold")
-    help_button.place(x=10, y=212)
-
     root.mainloop()
     
-
 draw_gui()
