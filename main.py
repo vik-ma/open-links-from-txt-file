@@ -95,11 +95,14 @@ def open_file_in_default_editor(filename):
     os.startfile(filename)
 
 def read_file(target_file) -> list:
-    """ Takes a .txt file, returns a formatted list for the script
+    """ 
+    Generate a formatted list.
 
-        Each entry in the list corresponds to one line in the .txt-file and consists of another list with 2 indices:
-            Index 0 stores the URL as a string
-            Index 1 stores the comment (if there is one) next to the URL as a string
+    Read a .txt file and return a formatted list to be read for the script.
+    
+    Each entry in the list corresponds to one line in the .txt-file and consists of another list with 2 indices:
+    Index 0 stores the URL as a string
+    Index 1 stores the comment (if there is one) next to the URL as a string
     """
 
     formatted_list = []
@@ -185,8 +188,8 @@ def draw_gui():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
     
-    #select_file_frame = tk.Frame(height=207, width=410, highlightbackground="black", highlightthickness=1)
-    #select_file_frame.place(x=-1, y=-1)
+    select_file_frame = tk.Frame(height=207, width=410, highlightbackground="black", highlightthickness=1)
+    select_file_frame.place(x=-1, y=-1)
     settings_frame = tk.Frame(height=98, width=602, highlightbackground="black", highlightthickness=1)
     settings_frame.place(x=-1, y=203)
 
@@ -418,9 +421,9 @@ def draw_gui():
 
 
     def reset_browser_menu():
-        """Updates the "Select Browser" dropdown menu after a change in the list of added browsers
-           Solution from https://stackoverflow.com/questions/17580218/changing-the-options-of-a-optionmenu-when-clicking-a-button
-        """
+        #Update the "Select Browser" dropdown menu after a change in the list of added browsers
+        #Solution from https://stackoverflow.com/questions/17580218/changing-the-options-of-a-optionmenu-when-clicking-a-button
+        
         browser_selection.set(get_browser_list()[0])
         browser_menu['menu'].delete(0, 'end')
 
@@ -459,9 +462,6 @@ def draw_gui():
 
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
     restore_default_button.place(x=10, y=265)
-
-    #add_remove_browser_label = tk.Label(root, text="Add/Remove Browser Path:")
-    #add_remove_browser_label.place(x=415, y=121)
 
     add_browser_button = tk.Button(root, text="Add Browser Path", command=lambda:[add_browser_path(), reset_browser_menu()])
     add_browser_button.place(x=415, y=143)
