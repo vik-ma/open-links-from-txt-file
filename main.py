@@ -172,7 +172,7 @@ def get_browser_list() -> list:
 
 def draw_gui():
     root = tk.Tk()
-    root.title("Open Links")
+    root.title("Open Links From Text File")
     browser_selection = tk.StringVar(root)
     browser_selection.set(get_browser_list()[0])
 
@@ -185,8 +185,8 @@ def draw_gui():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
     
-    select_file_frame = tk.Frame(height=207, width=410, highlightbackground="black", highlightthickness=1)
-    select_file_frame.place(x=-1, y=-1)
+    #select_file_frame = tk.Frame(height=207, width=410, highlightbackground="black", highlightthickness=1)
+    #select_file_frame.place(x=-1, y=-1)
     settings_frame = tk.Frame(height=98, width=602, highlightbackground="black", highlightthickness=1)
     settings_frame.place(x=-1, y=203)
 
@@ -263,21 +263,21 @@ def draw_gui():
 
     def apply_phrase_filter(phrase):
         if phrase != "":
-            current_filter.set(f"Filter by phrase: {phrase}")
+            current_filter.set(f"Open only lines containing comment: '{phrase}'")
             current_filter_type.set("Phrase")
             current_filter_value.set(phrase)
             clear_filter_entries()
 
     def apply_domain_filter(domain):
         if domain != "":
-            current_filter.set(f"Filter by URL: {domain}")
+            current_filter.set(f"Open only lines containing URL: '{domain}'")
             current_filter_type.set("Domain")
             current_filter_value.set(domain)
             clear_filter_entries()
 
     def apply_line_filter(start, end):
         if start != "" and end != "":
-            current_filter.set(f"Open Lines {start}-{end}")
+            current_filter.set(f"Open everything from line {start} to line {end}")
             current_filter_type.set("Lines")
             current_filter_value.set(str(start)+","+str(end))
             clear_filter_entries()
@@ -436,7 +436,7 @@ def draw_gui():
         change_delay.insert(0, config.get("USERCONFIG", "delay"))
     
     def restore_default_warning():
-        ask = messagebox.askquestion("Restore Default Config", "Do you really want to reset to default configuration? \nThis cannot be undone.")
+        ask = messagebox.askquestion("Restore Default Config", "Do you really want to reset to default configuration? \nThis can not be undone.")
         if ask == "yes":
             restore_default_config()
             reset_variables()
@@ -455,7 +455,7 @@ def draw_gui():
     root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
 
     def helpwindow():
-        messagebox.showinfo("Help","")
+        messagebox.showinfo("Help", "Add the path to the browser you want to use by clicking the 'Add Browser Path' button and then locate the .exe file of the browser on your system. You can add multiple browsers and the paths will be stored in the 'config.ini' file.\n\nSelect a text file to read from. The script will open the first entry of every line up until the first space or tab. Everything after the space is considered as a comment. Empty lines are not considered an entry.\n\nSet a filter only open specific lines of the text document.")
 
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
     restore_default_button.place(x=10, y=265)
