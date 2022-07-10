@@ -8,22 +8,23 @@ from configparser import ConfigParser
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
-batch_warning = 20                              #Warns when trying to open more than that many links
-delay = 250                                     #Delay between opening links in milliseconds
-defaultdir = DESKTOP                            #Default directory when selecting file
-autoclose = False                               #Closes program after opening links if True
-opentxtfile = False                             #Opens text file in default text editor if True
-savetxt = False                                 #Automatically selects saved file on startup if True
-savedtxtpath = "No File Selected"               #Filepath to the file to be automatically selected
+batch_warning = 20                          #Warns when trying to open more than that many links
+delay = 250                                 #Delay between opening links in milliseconds
+defaultdir = DESKTOP                        #Default directory when selecting file
+autoclose = False                           #Closes program after opening links if True
+opentxtfile = False                         #Opens text file in default text editor if True
+savetxt = False                             #Automatically selects saved file on startup if True
+savedtxtpath = "No File Selected"           #Filepath to the file to be automatically selected
 
-config = ConfigParser(default_section=None)     #Stops [DEFAULT] in config.ini from being overwritten
-has_config = pathlib.Path("config.ini").exists()
+config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
+has_config = pathlib.Path("config.ini").exists()    #Checks if config.ini file exits in same directory
 
 def write_config():
     with open("config.ini", "w") as configfile:
         config.write(configfile)
 
 if has_config:
+    #Changes variables to saved settings in config.ini
     config.read("config.ini")
     batch_warning = config.get("USERCONFIG", "batch_warning")
     delay = config.get("USERCONFIG", "delay")
@@ -190,9 +191,8 @@ def get_browser_list() -> list:
 def draw_gui():
     root = tk.Tk()
     root.title("Open Links From Text File")
-    browser_selection = tk.StringVar(root)
-    browser_selection.set(get_browser_list()[0])
 
+    #Create 600x300 unresizable GUI roughly in the middle of the screen (60px north of center)
     w = 600
     h = 300
     ws = root.winfo_screenwidth()
@@ -202,6 +202,7 @@ def draw_gui():
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
     root.resizable(width=False, height=False)
     
+    #Lines separating sections of the GUI
     select_file_frame = tk.Frame(height=207, width=410, highlightbackground="black", highlightthickness=1)
     select_file_frame.place(x=-1, y=-1)
     settings_frame = tk.Frame(height=98, width=602, highlightbackground="black", highlightthickness=1)
@@ -215,8 +216,10 @@ def draw_gui():
     def select_file():
         filename = filedialog.askopenfilename(initialdir=config.get("USERCONFIG", "defaultdir"), title="Select File", 
                                                     filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
+        #If filedialog box gets cancelled, "" is returned
         if filename != "":
             if open_txt_check.get() is True:
+                #Opens text file in systems default program if checkbox is checked
                 open_file_in_default_editor(filename)
             selected_file.set(filename)
 
@@ -256,6 +259,7 @@ def draw_gui():
     set_line_filter_button.place(x=373, y=173)
 
     def apply_phrase_filter(phrase):
+        """Set the filter to only include lines which comments contain specific phrase."""
         if phrase != "":
             current_filter.set(f"Open only lines containing comment: '{phrase}'")
             current_filter_type.set("Phrase")
@@ -263,6 +267,7 @@ def draw_gui():
             clear_filter_entries()
 
     def apply_domain_filter(domain):
+        """Set the filter to only include lines which URL contain specific text."""
         if domain != "":
             current_filter.set(f"Open only lines containing URL: '{domain}'")
             current_filter_type.set("Domain")
@@ -270,6 +275,7 @@ def draw_gui():
             clear_filter_entries()
 
     def apply_line_filter(start, end):
+        """Set the filter to only include lines of a specific index range."""
         if start != "" and end != "":
             current_filter.set(f"Open everything from line {start} to line {end}")
             current_filter_type.set("Lines")
@@ -309,6 +315,9 @@ def draw_gui():
                 check_if_browser_added()
         except:
             messagebox.showerror("Error", "Target file can not be read! Select a valid text file.")
+
+    browser_selection = tk.StringVar(root)
+    browser_selection.set(get_browser_list()[0])
 
     def check_if_browser_added():
         if browser_selection.get() == "No Browser Added":
