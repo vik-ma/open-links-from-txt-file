@@ -20,6 +20,7 @@ config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.i
 has_config = pathlib.Path("config.ini").exists()    #Checks if config.ini file exits in same directory
 
 def write_config():
+    """Write changed values to config.ini."""
     with open("config.ini", "w") as configfile:
         config.write(configfile)
 
@@ -49,6 +50,7 @@ else:
     write_config()
 
 def restore_default_config():
+    """Overwrite [USERCONFIG] with [DEFAULT] in config.ini."""
     default_config = config.items("DEFAULT")
     for k, v in default_config:
         config.set("USERCONFIG", k, v)
@@ -279,7 +281,7 @@ def draw_gui():
         if start != "" and end != "":
             current_filter.set(f"Open everything from line {start} to line {end}")
             current_filter_type.set("Lines")
-            current_filter_value.set(str(start)+","+str(end))
+            current_filter_value.set(str(start)+","+str(end))   #"," is used as a delimiter
             clear_filter_entries()
 
     current_filter_type = StringVar()   #Determines which type of filter (Comment phrase, link phrase or index range)
@@ -313,7 +315,7 @@ def draw_gui():
         Validate if file has been selected.
         
         If no file has been selected, or if the selected file can't be read as a text file, an error is shown.
-        Execute function to check if browser has been added if no issues found.
+        Execute check_if_browser_added() function if no issues found.
         """
         try:
             if selected_file.get() == "No File Selected":
@@ -333,7 +335,7 @@ def draw_gui():
         Validate if browse path has been added.
         
         Show error if no browser has ben added. 
-        Execute function to validate filter if no issues found.
+        Execute validate_filter() function if no issues found.
         """
         if browser_selection.get() == "No Browser Added":
             messagebox.showerror("Error", "Must add a path to a browser first!")
@@ -342,79 +344,112 @@ def draw_gui():
             validate_filter()
 
     def validate_filter():
-        """Validate if set filter is """
+        """
+        Validate if filter is legitimate.
+
+        Show error if filter is not valid.
+        Generate new list from selected file based of filter settings if filter has been set and is valid.
+        Execute check_batch_warning() function if no issues found. 
+        """
         filtertype, filtervalue = current_filter_type.get(), current_filter_value.get()
         file = read_file(selected_file.get())
         if filtertype and filtervalue != "":
             match filtertype:
                 case "Phrase":
+                    #Filter to include only lines containing comment phrase
                     try:
                         if filter_by_phrase(file, filtervalue) != []:
+                            #Proceed if no issues
                             check_batch_warning(filter_by_phrase(file, filtervalue))
                         else:
-                            messagebox.showerror("Error", f"No phrase '{filtervalue}' in file!")
-                    except Exception as e:                                      #Might never catch anything
+                            #Do not proceed if specific comment phrase was not found in file
+                            messagebox.showerror("Error", f"No comment phrase '{filtervalue}' in file!")
+                    except Exception as e:
+                        #Might be useless
                         messagebox.showerror("Error", e)
-
                 case "Domain":
+                    #Filter to include only lines containing domain phrase
                     try:
                         if filter_by_domain(file, filtervalue) != []:
+                            #Proceed if no issues
                             check_batch_warning(filter_by_domain(file, filtervalue))
                         else:
+                            #Do not proceed if specific domain phrase was not found in file
                             messagebox.showerror("Error", f"No URL containing '{filtervalue}' in file!")
-                    except Exception as e:                                      #Might never catch anything
+                    except Exception as e:
+                        #Might be useless
                         messagebox.showerror("Error", e)
-
                 case "Lines":
-                    line_index = filtervalue.split(",")
+                    #Filter to include only lines in specific index range
+                    line_index = filtervalue.split(",")     #Start and end value is split by "," delimiter
                     error_msg = "Range values must be valid line numbers in file!"
                     try:
-                        if int(line_index[0]) > int(line_index[1]):             #Check if start index is greater than end index     
+                        if int(line_index[0]) > int(line_index[1]):
+                            #Do not proceed if start index is greater than end index     
                             messagebox.showerror("Error", error_msg)
                             return
-                        if int(line_index[0]) < 1 or int(line_index[1]) < 1:    #Check if start or end index is 0 or below
+                        if int(line_index[0]) < 1 or int(line_index[1]) < 1:
+                            #Do not proceed if start or end index is 0 or below
                             messagebox.showerror("Error", error_msg)
                             return
+                        #Proceed if no issues
                         check_batch_warning(filter_by_lines(file, int(line_index[0]), int(line_index[1])))  
-                    except IndexError:                                          #Catches out of bounds indices
+                    except IndexError:
+                        #Catches out of bounds indices
                         messagebox.showerror("Error", error_msg)
-                    except ValueError:                                          #Catches non-integer values
+                    except ValueError:
+                        #Catches non-integer values
                         messagebox.showerror("Error", error_msg)
         else:
+            #Proceed to open whole file if no filter set
             check_batch_warning(file)        
 
     def check_batch_warning(link_list):
+        """Warn user if number of links set to be opened is greater batch_warning in settings."""
         if [] in link_list:
+            #Remove all items containing empty lines
             link_list.remove([])
         batch_warning = int(config.get("USERCONFIG", "batch_warning"))
         if len(link_list) >= batch_warning and batch_warning != 0:
+            #Send warning if number of links is greater than user setting
             msgbox_warning = messagebox.askquestion("Warning", f"You are about to open {len(link_list)} links. Proceed?")
             if msgbox_warning == "yes":
+                #Proceed if user clicks yes
                 open_links(link_list)
         else:
+            #Proceed if number is lower than batch_warning or if batch_warning is set to 0
             open_links(link_list)
 
     def open_links(link_list):
+        """
+        Open all links provided in list in selected browser.
+        
+        Close application if autoclose_checkbox has been ticked.
+        """
         browser = config.get("BROWSER_PATHS", browser_selection.get()) + " %s"
-        delay = int(config.get("USERCONFIG", "delay"))/1000
+        delay = int(config.get("USERCONFIG", "delay"))/1000     #Converts milliseconds to seconds
         for link in link_list:
             webbrowser.get(browser).open_new_tab(link[0])
-            time.sleep(delay)
+            time.sleep(delay)       #Add delay between every link being opened
         if close_check.get() is True:
-            check_checkboxes()
+            #Closes application after links have been opened if autoclose_checkbox has bebn ticked
+            check_checkboxes()      #Saves any changes made to checkboxes before closing application
             close()
 
+    #Checkbox to open text file in default text editor if checked when selecting file
     open_txt_check = tk.BooleanVar()
     open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
     open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
     open_txt_checkbox.place(x=145, y=5)
 
+    #Checkbox to automatically select same file next time application is opened
     save_txt_check = tk.BooleanVar()
     save_txt_check.set(config.get("USERCONFIG", "savetxt"))
     save_txt_checkbox = tk.Checkbutton(root, text="Remember file next time program is opened", variable=save_txt_check, onvalue=True, offvalue=False)
     save_txt_checkbox.place(x=145, y=25)
 
     if save_txt_check.get() is True:
+        #Automatically select saved file if setting is on
         selected_file.set(config.get("USERCONFIG", "savedtxtpath"))
 
     def helpwindow():
@@ -423,7 +458,7 @@ def draw_gui():
     help_button = tk.Button(root, text="Help", command=helpwindow, font="arial 13 bold")
     help_button.place(x=10, y=212)
 
-    
+    #Show and allow user to change default directory where user selects text files
     defaultdir_get = StringVar()
     defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))
     defaultdir_label = tk.Label(root, textvariable=defaultdir_get)
@@ -431,6 +466,7 @@ def draw_gui():
     set_defaultdir_button = tk.Button(root, text="Change", command=lambda:[set_default_dir(), reset_variables()])
     set_defaultdir_button.place(x=542, y=208)
 
+    #Show and allow user to change how many links can be opened without warning
     warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=155, y=240)
     change_warning = tk.Entry(root, width=5)
@@ -439,6 +475,7 @@ def draw_gui():
     set_warning_button = tk.Button(root, text="Change", command=lambda:[set_batch_warning(change_warning.get()), reset_variables()])
     set_warning_button.place(x=542, y=238)
 
+    #Show and allow user to change the delay between opening links
     delay_label = tk.Label(root, text="Delay between opening links (In milliseconds):")
     delay_label.place(x=155, y=270)
     change_delay = tk.Entry(root, width=5)
@@ -450,6 +487,7 @@ def draw_gui():
     def restore_default_warning():
         ask = messagebox.askquestion("Restore Default Config", "Do you really want to reset to default configuration? \nThis can not be undone.")
         if ask == "yes":
+            #Proceed if user clicks yes
             restore_default_config()
             reset_variables()
             close_check.set(config.get("USERCONFIG", "autoclose"))
@@ -460,18 +498,21 @@ def draw_gui():
     restore_default_button.place(x=10, y=265)
     
     def reset_variables():
+        """Update values of setting variables in GUI."""
         defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))        
         change_warning.delete(0, tk.END)
         change_delay.delete(0, tk.END)
         change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
         change_delay.insert(0, config.get("USERCONFIG", "delay"))
 
+    #Checkbox to automatically close program after opening links
     close_check = tk.BooleanVar()
     close_check.set(config.get("USERCONFIG", "autoclose"))
     autoclose_checkbox = tk.Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
     autoclose_checkbox.place(x=412, y=42)
 
     def check_checkboxes(): 
+        """Update value of checkboxes if any change has been made."""
         if config.get("USERCONFIG", "autoclose") != close_check.get():
             set_autoclose(close_check.get()) 
         if config.get("USERCONFIG", "opentxtfile") != open_txt_check.get():
@@ -493,25 +534,24 @@ def draw_gui():
     del_browser_button.place(x=415, y=173)
 
     def reset_browser_menu():
-        #Update the "Select Browser" dropdown menu after a change in the list of added browsers
+        """Update the "Select Browser" dropdown menu after a change in the list of added browsers"""
         #Solution from https://stackoverflow.com/questions/17580218/changing-the-options-of-a-optionmenu-when-clicking-a-button
-        
         browser_selection.set(get_browser_list()[0])
         browser_menu['menu'].delete(0, 'end')
-
         new_choices = get_browser_list()
         for choice in new_choices:
             browser_menu['menu'].add_command(label=choice, command=tk._setit(browser_selection, choice))
 
     def close():
         if save_txt_check.get() is True:
+            #Saves last selected file to config.ini if save_txt_checkbox is ticked
             set_savedtxtpath(selected_file.get())
         else:
             set_savedtxtpath("No File Selected")
         root.destroy()
 
-    root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
     #Update checkboxes when closing. Executes second command after first one.
+    root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
 
     root.mainloop()
     
