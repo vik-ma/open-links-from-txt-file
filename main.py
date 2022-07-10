@@ -8,15 +8,15 @@ from configparser import ConfigParser
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
 
-batch_warning = 20                      #Warns when trying to open more than that many links
-delay = 250                             #Delay between opening links in milliseconds
-defaultdir = DESKTOP                    #Default directory when selecting file
-autoclose = False                       #Closes program after opening links if True
-opentxtfile = False                     #Opens text file in default text editor if True
-savetxt = False                         #Automatically selects saved file on startup if True
-savedtxtpath = "No File Selected"       #Filepath to the file to be automatically selected
+batch_warning = 20                              #Warns when trying to open more than that many links
+delay = 250                                     #Delay between opening links in milliseconds
+defaultdir = DESKTOP                            #Default directory when selecting file
+autoclose = False                               #Closes program after opening links if True
+opentxtfile = False                             #Opens text file in default text editor if True
+savetxt = False                                 #Automatically selects saved file on startup if True
+savedtxtpath = "No File Selected"               #Filepath to the file to be automatically selected
 
-config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
+config = ConfigParser(default_section=None)     #Stops [DEFAULT] in config.ini from being overwritten
 has_config = pathlib.Path("config.ini").exists()
 
 def write_config():
@@ -32,8 +32,8 @@ if has_config:
     opentxtfile = config.get("USERCONFIG", "opentxtfile")
     savetxt = config.get("USERCONFIG", "savetxt")
     savedtxtpath = config.get("USERCONFIG", "savedtxtpath")
-
-else:                                               #Creates default config.ini if it doesn't exist
+else:
+    #Creates default config.ini if it doesn't exist
     config.add_section("DEFAULT")
     config.add_section("USERCONFIG")
     for section in config.sections():
@@ -49,10 +49,8 @@ else:                                               #Creates default config.ini 
 
 def restore_default_config():
     default_config = config.items("DEFAULT")
-
     for k, v in default_config:
         config.set("USERCONFIG", k, v)
-
     write_config()
 
 def set_batch_warning(input):
@@ -92,6 +90,7 @@ def set_savedtxtpath(path):
     write_config()
 
 def open_file_in_default_editor(filename):
+    """Open file in system's default program"""
     os.startfile(filename)
 
 def read_file(target_file) -> list:
@@ -106,7 +105,6 @@ def read_file(target_file) -> list:
     """
 
     formatted_list = []
-
     with open (target_file, "r") as file:
         file_contents = file.readlines()
         
@@ -119,35 +117,47 @@ def read_file(target_file) -> list:
                 x = " ".join(x)
                 line_contents[1] = x
             formatted_list.append(line_contents)
-        
     return formatted_list
 
 
 def filter_by_phrase(l, p) -> list:
+    """
+    Generate a filtered list based on phrase.
+    
+    Take a list of list and return only the items containing the provided phrase in index 1.
+    """
     phrase = p.lower()
     filtered_list = []
-
     for i in l:
         if (len(i)==2):
+        #Skips if no comment (Index 1 represents the comment)
             if (phrase in i[1]):
                 filtered_list.append(i)
-
     return filtered_list
 
 
 def filter_by_domain(l, p) -> list:
+    """
+    Generate a filtered list based on phrase.
+
+    Take a list of list and return only the items containing the provided phrase in index 0.
+    """
     phrase = p.lower()
     filtered_list = []
-
     for i in l:
         if (len(i)>0):
+        #Skips empty lines
             if (phrase in i[0]):
                 filtered_list.append(i)
-
     return filtered_list
 
 
 def filter_by_lines(l, start, end) -> list:
+    """
+    Generate a filtered list based on a given range of numbers.
+
+    Take a list of list and return only the items at the provided indices.
+    """
     newlist = []
     [newlist.append(l[n]) for n in range(start-1, end)]
     return newlist
