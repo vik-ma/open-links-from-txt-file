@@ -167,9 +167,11 @@ def add_browser_path():
     filename = filedialog.askopenfilename(initialdir="/", title="Select File", 
                                          filetypes=[("Executable file (*.exe)", "*.exe"), ("All Files", "*.*")])
     get_browsername = filename.split("/")
-    browsername = get_browsername[-1].split(".")
+    browsername = get_browsername[-1].split(".")    
+    #Takes only the filename of the full path of the file and then splits it by the file extension (.)
 
     if filename != "":
+        #Writes the name of the file selected to [BROWSER_PATHS] in config.ini as well as it's full path
         config.set("BROWSER_PATHS", browsername[0], filename)
         write_config()
 
@@ -179,8 +181,10 @@ def remove_browser(browser):
 
 def get_browser_list() -> list:
     if config.items("BROWSER_PATHS") == []:
+        #If no browsers added in config.ini
         return ["No Browser Added"]
     else:
+        #Return the name of all browsers added in [BROWSER_PATHS] in config.ini
         return [option.title() for option in config['BROWSER_PATHS']]
 
 def draw_gui():
@@ -480,8 +484,8 @@ def draw_gui():
             set_savedtxtpath("No File Selected")
         root.destroy()
 
-    #Updates checkboxes when closing. Executes second command after first one.
     root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
+    #Update checkboxes when closing. Executes second command after first one.
 
     root.mainloop()
     
