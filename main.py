@@ -267,7 +267,7 @@ def draw_gui():
             clear_filter_entries()
 
     def apply_domain_filter(domain):
-        """Set the filter to only include lines which URL contain specific text."""
+        """Set the filter to only include lines which URL contain specific phrase."""
         if domain != "":
             current_filter.set(f"Open only lines containing URL: '{domain}'")
             current_filter_type.set("Domain")
@@ -282,8 +282,8 @@ def draw_gui():
             current_filter_value.set(str(start)+","+str(end))
             clear_filter_entries()
 
-    current_filter_type = StringVar()
-    current_filter_value = StringVar()
+    current_filter_type = StringVar()   #Determines which type of filter (Comment phrase, link phrase or index range)
+    current_filter_value = StringVar()  #Stores the actual value to be filtered
 
     reset_filter_button = tk.Button(root, text="Reset Filter", command=lambda:[reset_filter()])
     reset_filter_button.place(x=332, y=83)
@@ -295,6 +295,7 @@ def draw_gui():
         clear_filter_entries()
 
     def clear_filter_entries():
+        """Empty all filter-related entry fields."""
         set_phrase_filter.delete(0, tk.END)
         set_phrase_filter.insert(0, "")
         set_domain_filter.delete(0, tk.END)
@@ -308,24 +309,40 @@ def draw_gui():
     open_links_button.place(x=415, y=8)
     
     def check_if_file_selected():
+        """
+        Validate if file has been selected.
+        
+        If no file has been selected, or if the selected file can't be read as a text file, an error is shown.
+        Execute function to check if browser has been added if no issues found.
+        """
         try:
             if selected_file.get() == "No File Selected":
                 messagebox.showerror("Error", "Must select a text file to read from first!")
             else:
+                #Proceed if no issues
                 check_if_browser_added()
         except:
+            #If the file cannot be read as a text file
             messagebox.showerror("Error", "Target file can not be read! Select a valid text file.")
 
     browser_selection = tk.StringVar(root)
     browser_selection.set(get_browser_list()[0])
 
     def check_if_browser_added():
+        """
+        Validate if browse path has been added.
+        
+        Show error if no browser has ben added. 
+        Execute function to validate filter if no issues found.
+        """
         if browser_selection.get() == "No Browser Added":
             messagebox.showerror("Error", "Must add a path to a browser first!")
         else:
-            validate_input()
+            #Proceed if no issues
+            validate_filter()
 
-    def validate_input():
+    def validate_filter():
+        """Validate if set filter is """
         filtertype, filtervalue = current_filter_type.get(), current_filter_value.get()
         file = read_file(selected_file.get())
         if filtertype and filtervalue != "":
