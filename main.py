@@ -57,12 +57,14 @@ def restore_default_config():
     write_config()
 
 def set_default_dir():
+    """Set the default directory when selecting text file and save value in config.ini."""
     folder = filedialog.askdirectory(initialdir=config.get("USERCONFIG", "defaultdir"))
     if folder != "":
         config.set("USERCONFIG", "defaultdir", folder)
         write_config()
 
 def set_int_variable(variable, value):
+    """Check if integer value is valid and save value to corresponding variable in config.ini."""
     if str(value).isdigit():
         config.set("USERCONFIG", variable, str(value))
         write_config()
@@ -70,11 +72,12 @@ def set_int_variable(variable, value):
         messagebox.showerror("Error", "Value must be a non-negative integer")
 
 def set_str_variable(variable, value):
+    """Save string or boolean value to corresponding variable in config.ini."""
     config.set("USERCONFIG", variable, str(value))
     write_config()
 
 def open_file_in_default_editor(filename):
-    """Open file in system's default program"""
+    """Open file in system's default program."""
     os.startfile(filename)
 
 def read_file(target_file) -> list:
@@ -148,22 +151,24 @@ def filter_by_lines(l, start, end) -> list:
 
 
 def add_browser_path():
+    """Save selected browser path and name to config.ini."""
     filename = filedialog.askopenfilename(initialdir="/", title="Select File", 
                                          filetypes=[("Executable file (*.exe)", "*.exe"), ("All Files", "*.*")])
     get_browsername = filename.split("/")
     browsername = get_browsername[-1].split(".")    
     #Takes only the filename of the full path of the file and then splits it by the file extension (.)
-
     if filename != "":
         #Writes the name of the file selected to [BROWSER_PATHS] in config.ini as well as it's full path
         config.set("BROWSER_PATHS", browsername[0], filename)
         write_config()
 
 def remove_browser(browser):
+    """Remove selected browser path entry from config.ini."""
     config.remove_option("BROWSER_PATHS", browser)
     write_config()
 
 def get_browser_list() -> list:
+    """Return the list of browsers added to config.ini."""
     if config.items("BROWSER_PATHS") == []:
         #If no browsers added in config.ini
         return ["No Browser Added"]
@@ -172,6 +177,7 @@ def get_browser_list() -> list:
         return [option.title() for option in config['BROWSER_PATHS']]
 
 def draw_gui():
+    """Construct the GUI for the application."""
     root = tk.Tk()
     root.title("Open Links From Text File")
 
@@ -197,6 +203,7 @@ def draw_gui():
     selected_file_label.place(x=8, y=55)
 
     def select_file():
+        """Let user select text file from system and store it's path as a variable."""
         filename = filedialog.askopenfilename(initialdir=config.get("USERCONFIG", "defaultdir"), title="Select File", 
                                                     filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
         #If filedialog box gets cancelled, "" is returned
@@ -272,6 +279,7 @@ def draw_gui():
     reset_filter_button.place(x=332, y=83)
     
     def reset_filter():
+        """Remove the currently set filter."""
         current_filter.set("Open All Lines In Document (No Filter Set)")
         current_filter_type.set("")
         current_filter_value.set("")
@@ -466,6 +474,7 @@ def draw_gui():
     set_delay_button.place(x=542, y=268)
 
     def restore_default_warning():
+        """Overwrite all variables in config.ini under [USERCONFIG] with [DEFAULT] values if user clicks "Yes"."""
         ask = messagebox.askquestion("Restore Default Config", "Do you really want to reset to default configuration? \nThis can not be undone.")
         if ask == "yes":
             #Proceed if user clicks yes
@@ -524,6 +533,7 @@ def draw_gui():
             browser_menu['menu'].add_command(label=choice, command=tk._setit(browser_selection, choice))
 
     def close():
+        """Close application after updating savedtxtpath variable (if changed)."""
         if save_txt_check.get() is True:
             #Saves last selected file to config.ini if save_txt_checkbox is ticked
             set_str_variable("savedtxtpath", selected_file.get())
@@ -531,7 +541,7 @@ def draw_gui():
             set_str_variable("savedtxtpath", "No File Selected")
         root.destroy()
 
-    #Update checkboxes when closing. Executes second command after first one.
+    #Update checkboxes when closing application. Executes second command before calling root.destroy().
     root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
 
     root.mainloop()
