@@ -442,6 +442,7 @@ def draw_gui():
         selected_file.set(config.get("USERCONFIG", "savedtxtpath"))
 
     def helpwindow():
+        """Show help window in GUI."""
         messagebox.showinfo("Help", "Add the path to the browser you want to use by clicking the 'Add Browser Path' button and then locate the .exe file of the browser on your system. You can add multiple browsers and the paths will be stored in the 'config.ini' file.\n\nSelect a text file to read from. The script will open the first entry of every line up until the first space or tab. Everything after the space is considered as a comment. Empty lines are not considered an entry.\n\nSet a filter only open specific lines in the text document.\n\nIf the script fails to execute, the added browser is not valid.")
 
     help_button = tk.Button(root, text="Help", command=helpwindow, font="arial 13 bold")
