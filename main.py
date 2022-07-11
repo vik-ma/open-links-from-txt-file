@@ -56,40 +56,21 @@ def restore_default_config():
         config.set("USERCONFIG", k, v)
     write_config()
 
-def set_batch_warning(input):
-    if str(input).isdigit():
-        config.set("USERCONFIG", "batch_warning", str(input))
-        write_config()
-    else:
-        messagebox.showerror("Error", "Value must be a non-negative integer")
-
-def set_delay(input):
-    if str(input).isdigit():
-        config.set("USERCONFIG", "delay", str(input))
-        write_config()
-    else:
-        messagebox.showerror("Error", "Value must be a non-negative integer")
-
 def set_default_dir():
     folder = filedialog.askdirectory(initialdir=config.get("USERCONFIG", "defaultdir"))
     if folder != "":
         config.set("USERCONFIG", "defaultdir", folder)
         write_config()
 
-def set_autoclose(value):
-    config.set("USERCONFIG", "autoclose", str(value))
-    write_config()
+def set_int_variable(variable, value):
+    if str(value).isdigit():
+        config.set("USERCONFIG", variable, str(value))
+        write_config()
+    else:
+        messagebox.showerror("Error", "Value must be a non-negative integer")
 
-def set_opentxtfile(value):
-    config.set("USERCONFIG", "opentxtfile", str(value))
-    write_config()
-
-def set_savetxt(value):
-    config.set("USERCONFIG", "savetxt", str(value))
-    write_config()
-
-def set_savedtxtpath(path):
-    config.set("USERCONFIG", "savedtxtpath", str(path))
+def set_str_variable(variable, value):
+    config.set("USERCONFIG", variable, str(value))
     write_config()
 
 def open_file_in_default_editor(filename):
@@ -472,7 +453,7 @@ def draw_gui():
     change_warning = tk.Entry(root, width=5)
     change_warning.place(x=500, y=241)
     change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
-    set_warning_button = tk.Button(root, text="Change", command=lambda:[set_batch_warning(change_warning.get()), reset_variables()])
+    set_warning_button = tk.Button(root, text="Change", command=lambda:[set_int_variable("batch_warning", change_warning.get()), reset_variables()])
     set_warning_button.place(x=542, y=238)
 
     #Show and allow user to change the delay between opening links
@@ -481,7 +462,7 @@ def draw_gui():
     change_delay = tk.Entry(root, width=5)
     change_delay.place(x=500, y=271)
     change_delay.insert(0, config.get("USERCONFIG", "delay"))
-    set_delay_button = tk.Button(root, text="Change", command=lambda:[set_delay(change_delay.get()), reset_variables()])
+    set_delay_button = tk.Button(root, text="Change", command=lambda:[set_int_variable("delay", change_delay.get()), reset_variables()])
     set_delay_button.place(x=542, y=268)
 
     def restore_default_warning():
@@ -514,11 +495,11 @@ def draw_gui():
     def check_checkboxes(): 
         """Update value of checkboxes if any change has been made."""
         if config.get("USERCONFIG", "autoclose") != close_check.get():
-            set_autoclose(close_check.get()) 
+            set_str_variable("autoclose", close_check.get()) 
         if config.get("USERCONFIG", "opentxtfile") != open_txt_check.get():
-            set_opentxtfile(open_txt_check.get()) 
+            set_str_variable("opentxtfile", open_txt_check.get()) 
         if config.get("USERCONFIG", "savetxt") != save_txt_check.get():
-            set_savetxt(save_txt_check.get())
+            set_str_variable("savetxt", save_txt_check.get())
 
     browser_label = tk.Label(root, text="Open In Browser:", font="arial 13 bold")
     browser_label.place(x=415, y=75)
@@ -545,9 +526,9 @@ def draw_gui():
     def close():
         if save_txt_check.get() is True:
             #Saves last selected file to config.ini if save_txt_checkbox is ticked
-            set_savedtxtpath(selected_file.get())
+            set_str_variable("savedtxtpath", selected_file.get())
         else:
-            set_savedtxtpath("No File Selected")
+            set_str_variable("savedtxtpath", "No File Selected")
         root.destroy()
 
     #Update checkboxes when closing. Executes second command after first one.
