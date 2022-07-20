@@ -152,13 +152,23 @@ def filter_by_lines(l, start, end) -> list:
 def filter_ignored_links(l) -> list:
     filtered_list = []
     for i in l:
-        if len(i) > 0:
-        #Skips empty lines
-            if i[0][-2::] != "--":
-            #Checks if the last two characters of the domain contains '--'
-                filtered_list.append(i)
+        if i[0][-2::] != "--":
+        #Checks if the last two characters of the domain are not '--'
+            filtered_list.append(i)
     return filtered_list
 
+def strip_dashes_from_links(l) -> list:
+    filtered_list = []
+    for i in l:
+        i[0] = i[0].strip("-")
+        filtered_list.append(i)
+        '''if i[0][-2::] == "--":
+        #Checks if the last two characters of the domain are '--'
+            i[0] = i[0].strip("-")  #Removes '--' from the end of the link
+            filtered_list.append(i)
+        else:
+            filtered_list.append(i)'''
+    return filtered_list
 
 def add_browser_path():
     """Save selected browser path and name to config.ini."""
@@ -210,7 +220,7 @@ def draw_gui():
     selected_file = StringVar()
     selected_file.set("No File Selected")
     selected_file_label = tk.Label(root, textvariable=selected_file, fg="#166edb")
-    selected_file_label.place(x=8, y=48)
+    selected_file_label.place(x=8, y=46)
 
     def select_file():
         """Let user select text file from system and store it's path as a variable."""
@@ -404,10 +414,14 @@ def draw_gui():
             check_batch_warning(file)        
 
     def check_batch_warning(link_list):
-        """Warn user if number of links set to be opened is greater batch_warning in settings."""
+        """Warn user if number of links set to be opened is greater than batch_warning in settings."""
         if [] in link_list:
             #Remove all items containing empty lines
             link_list.remove([])
+        if ignore_dash_check.get() is True:
+            #Removes all links ending with '--' if checkbox is checked
+            link_list = filter_ignored_links(link_list)
+        link_list = strip_dashes_from_links(link_list)      #Removes any dashes at the end of the links
         batch_warning = int(config.get("USERCONFIG", "batch_warning"))
         if len(link_list) >= batch_warning and batch_warning != 0:
             #Send warning if number of links is greater than user setting
@@ -450,7 +464,7 @@ def draw_gui():
     ignore_dash_check = tk.BooleanVar()
     ignore_dash_check.set(True)
     ignore_dash_checkbox = tk.Checkbutton(root, text="Don't open links ending with '--'", variable=ignore_dash_check, onvalue=True, offvalue=False)
-    ignore_dash_checkbox.place(x=7, y=65)
+    ignore_dash_checkbox.place(x=7, y=64)
 
     if save_txt_check.get() is True:
         #Automatically select saved file if setting is on
