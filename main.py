@@ -153,6 +153,11 @@ def filter_by_lines(l, start, end) -> list:
     return newlist
 
 def filter_ignored_links(l) -> list:
+    """
+    Generate a filtered list based on links that contains two dashes at the end.
+
+    Take a list of list and return only the items which do not end with '--' in index 0.
+    """
     filtered_list = []
     for i in l:
         if i[0][-2::] != "--":
@@ -161,16 +166,15 @@ def filter_ignored_links(l) -> list:
     return filtered_list
 
 def strip_dashes_from_links(l) -> list:
+    """
+    Generate a modified list.
+
+    Take a list of list and return a list which has removed any dashes at the end (or start) of index 0.
+    """
     filtered_list = []
     for i in l:
         i[0] = i[0].strip("-")
         filtered_list.append(i)
-        '''if i[0][-2::] == "--":
-        #Checks if the last two characters of the domain are '--'
-            i[0] = i[0].strip("-")  #Removes '--' from the end of the link
-            filtered_list.append(i)
-        else:
-            filtered_list.append(i)'''
     return filtered_list
 
 def add_browser_path():
@@ -464,6 +468,7 @@ def draw_gui():
     save_txt_checkbox = tk.Checkbutton(root, text="Remember file next time program is opened", variable=save_txt_check, onvalue=True, offvalue=False)
     save_txt_checkbox.place(x=145, y=25)
 
+    #Checkbox to ignore opening links ending with '--' if checked
     ignore_dash_check = tk.BooleanVar()
     ignore_dash_check.set(config.get("USERCONFIG", "ignore_dashes"))
     ignore_dash_checkbox = tk.Checkbutton(root, text="Don't open links ending with '--'", variable=ignore_dash_check, onvalue=True, offvalue=False)
