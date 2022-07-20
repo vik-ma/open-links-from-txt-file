@@ -15,6 +15,7 @@ autoclose = False                           #Closes program after opening links 
 opentxtfile = False                         #Opens text file in default text editor if True
 savetxt = False                             #Automatically selects saved file on startup if True
 savedtxtpath = "No File Selected"           #Filepath to the file to be automatically selected
+ignore_dashes = True                        #Ignores opening links ending with '--' if True
 
 config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
 has_config = pathlib.Path("config.ini").exists()    #Checks if config.ini file exits in same directory
@@ -34,6 +35,7 @@ if has_config:
     opentxtfile = config.get("USERCONFIG", "opentxtfile")
     savetxt = config.get("USERCONFIG", "savetxt")
     savedtxtpath = config.get("USERCONFIG", "savedtxtpath")
+    ignore_dashes = config.get("USERCONFIG", "ignore_dashes")
 else:
     #Creates default config.ini if it doesn't exist
     config.add_section("DEFAULT")
@@ -46,6 +48,7 @@ else:
         config.set(section, "opentxtfile", str(opentxtfile))
         config.set(section, "savetxt", str(savetxt))
         config.set(section, "savedtxtpath", savedtxtpath)
+        config.set(section, "ignore_dashes", str(ignore_dashes))
     config.add_section("BROWSER_PATHS")
     write_config()
 
@@ -462,7 +465,7 @@ def draw_gui():
     save_txt_checkbox.place(x=145, y=25)
 
     ignore_dash_check = tk.BooleanVar()
-    ignore_dash_check.set(True)
+    ignore_dash_check.set(config.get("USERCONFIG", "ignore_dashes"))
     ignore_dash_checkbox = tk.Checkbutton(root, text="Don't open links ending with '--'", variable=ignore_dash_check, onvalue=True, offvalue=False)
     ignore_dash_checkbox.place(x=7, y=64)
 
@@ -513,6 +516,7 @@ def draw_gui():
             close_check.set(config.get("USERCONFIG", "autoclose"))
             open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
             save_txt_check.set(config.get("USERCONFIG", "savetxt"))
+            ignore_dash_check.set(config.get("USERCONFIG", "ignore_dashes"))
 
     restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
     restore_default_button.place(x=10, y=265)
@@ -539,6 +543,8 @@ def draw_gui():
             set_str_variable("opentxtfile", open_txt_check.get()) 
         if config.get("USERCONFIG", "savetxt") != save_txt_check.get():
             set_str_variable("savetxt", save_txt_check.get())
+        if config.get("USERCONFIG", "ignore_dashes") != ignore_dash_check.get():
+            set_str_variable("ignore_dashes", ignore_dash_check.get())
 
     browser_label = tk.Label(root, text="Open In Browser:", font="arial 13 bold")
     browser_label.place(x=415, y=75)
