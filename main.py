@@ -200,7 +200,7 @@ def draw_gui():
     selected_file = StringVar()
     selected_file.set("No File Selected")
     selected_file_label = tk.Label(root, textvariable=selected_file, fg="#166edb")
-    selected_file_label.place(x=8, y=55)
+    selected_file_label.place(x=8, y=48)
 
     def select_file():
         """Let user select text file from system and store it's path as a variable."""
@@ -436,6 +436,11 @@ def draw_gui():
     save_txt_check.set(config.get("USERCONFIG", "savetxt"))
     save_txt_checkbox = tk.Checkbutton(root, text="Remember file next time program is opened", variable=save_txt_check, onvalue=True, offvalue=False)
     save_txt_checkbox.place(x=145, y=25)
+
+    ignore_dash_check = tk.BooleanVar()
+    ignore_dash_check.set(True)
+    ignore_dash_checkbox = tk.Checkbutton(root, text="Don't open links ending with '--'", variable=ignore_dash_check, onvalue=True, offvalue=False)
+    ignore_dash_checkbox.place(x=7, y=65)
 
     if save_txt_check.get() is True:
         #Automatically select saved file if setting is on
