@@ -149,6 +149,16 @@ def filter_by_lines(l, start, end) -> list:
     [newlist.append(l[n]) for n in range(start-1, end)]
     return newlist
 
+def filter_ignored_links(l) -> list:
+    filtered_list = []
+    for i in l:
+        if len(i) > 0:
+        #Skips empty lines
+            if i[0][-2::] != "--":
+            #Checks if the last two characters of the domain contains '--'
+                filtered_list.append(i)
+    return filtered_list
+
 
 def add_browser_path():
     """Save selected browser path and name to config.ini."""
