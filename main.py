@@ -169,11 +169,12 @@ def strip_dashes_from_links(l) -> list:
     """
     Generate a modified list.
 
-    Take a list of list and return a list which has removed any dashes at the end (or start) of index 0.
+    Take a list of list and return a list where index 0 has had '--' removed from it's end.
     """
     filtered_list = []
     for i in l:
-        i[0] = i[0].strip("-")
+        if i[0][-2::] == "--":
+            i[0] = i[0][:-2:]
         filtered_list.append(i)
     return filtered_list
 
@@ -428,7 +429,9 @@ def draw_gui():
         if ignore_dash_check.get() is True:
             #Removes all links ending with '--' if checkbox is checked
             link_list = filter_ignored_links(link_list)
-        link_list = strip_dashes_from_links(link_list)      #Removes any dashes at the end of the links
+        else:
+            #Removes double dashes from the end of the links
+            link_list = strip_dashes_from_links(link_list)      
         batch_warning = int(config.get("USERCONFIG", "batch_warning"))
         if len(link_list) >= batch_warning and batch_warning != 0:
             #Send warning if number of links is greater than user setting
