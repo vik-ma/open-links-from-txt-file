@@ -456,7 +456,7 @@ def draw_gui():
         if close_check.get() is True:
             #Closes application after links have been opened if autoclose_checkbox has bebn ticked
             check_checkboxes()      #Saves any changes made to checkboxes before closing application
-            close()
+            #close()
 
     #Checkbox to open text file in default text editor if checked when selecting file
     open_txt_check = tk.BooleanVar()
@@ -552,6 +552,7 @@ def draw_gui():
             set_str_variable("savetxt", save_txt_check.get())
         if config.get("USERCONFIG", "ignore_dashes") != ignore_dash_check.get():
             set_str_variable("ignore_dashes", ignore_dash_check.get())
+        close()
 
     browser_label = tk.Label(root, text="Open In Browser:", font="arial 13 bold")
     browser_label.place(x=415, y=75)
@@ -585,7 +586,7 @@ def draw_gui():
         root.destroy()
 
     #Update checkboxes when closing application. Executes second command before calling root.destroy().
-    root.protocol("WM_DELETE_WINDOW", lambda:[close(), check_checkboxes()])
+    root.protocol("WM_DELETE_WINDOW", lambda:[check_checkboxes()])
 
     root.mainloop()
     
