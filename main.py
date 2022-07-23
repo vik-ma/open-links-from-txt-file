@@ -97,12 +97,11 @@ def read_file(target_file) -> list:
     formatted_list = []
     with open (target_file, "r") as file:
         file_contents = file.readlines()
-        
         for f in file_contents:
             f = f.strip()
             f = f.lower()
             line_contents = f.split(None,1)
-            if (len(line_contents) > 1):            # Replaces "\t" with spaces in the comment (if there is a comment)
+            if len(line_contents) > 1:            # Replaces "\t" with spaces in the comment (if there is a comment)
                 x = line_contents[1].split("\t")    
                 x = " ".join(x)
                 line_contents[1] = x
@@ -110,72 +109,72 @@ def read_file(target_file) -> list:
     return formatted_list
 
 
-def filter_by_phrase(l, p) -> list:
+def filter_by_phrase(list, phrase) -> list:
     """
     Generate a filtered list based on phrase.
     
     Take a list of list and return only the items containing the provided phrase in index 1.
     """
-    phrase = p.lower()
+    phrase = phrase.lower()
     filtered_list = []
-    for i in l:
-        if (len(i)==2):
+    for line in list:
+        if len(line) == 2:
         #Skips if no comment (Index 1 represents the comment)
-            if (phrase in i[1]):
-                filtered_list.append(i)
+            if phrase in line[1]:
+                filtered_list.append(line)
     return filtered_list
 
 
-def filter_by_domain(l, p) -> list:
+def filter_by_domain(list, phrase) -> list:
     """
     Generate a filtered list based on phrase.
 
     Take a list of list and return only the items containing the provided phrase in index 0.
     """
-    phrase = p.lower()
+    phrase = phrase.lower()
     filtered_list = []
-    for i in l:
-        if (len(i)>0):
+    for line in list:
+        if len(line) > 0:
         #Skips empty lines
-            if (phrase in i[0]):
-                filtered_list.append(i)
+            if phrase in line[0]:
+                filtered_list.append(line)
     return filtered_list
 
 
-def filter_by_lines(l, start, end) -> list:
+def filter_by_lines(list, start, end) -> list:
     """
     Generate a filtered list based on a given range of numbers.
 
     Take a list of list and return only the items at the provided indices.
     """
     newlist = []
-    [newlist.append(l[n]) for n in range(start-1, end)]
+    [newlist.append(list[n]) for n in range(start-1, end)]
     return newlist
 
-def filter_ignored_links(l) -> list:
+def filter_ignored_links(list) -> list:
     """
     Generate a filtered list based on links that contains two dashes at the end.
 
     Take a list of list and return only the items which do not end with '--' in index 0.
     """
     filtered_list = []
-    for i in l:
-        if i[0][-2::] != "--":
+    for line in list:
+        if line[0][-2::] != "--":
         #Checks if the last two characters of the domain are not '--'
-            filtered_list.append(i)
+            filtered_list.append(line)
     return filtered_list
 
-def strip_dashes_from_links(l) -> list:
+def strip_dashes_from_links(list) -> list:
     """
     Generate a modified list.
 
     Take a list of list and return a list where index 0 has had '--' removed from it's end.
     """
     filtered_list = []
-    for i in l:
-        if i[0][-2::] == "--":
-            i[0] = i[0][:-2:]
-        filtered_list.append(i)
+    for line in list:
+        if line[0][-2::] == "--":
+            line[0] = line[0][:-2:]
+        filtered_list.append(line)
     return filtered_list
 
 def add_browser_path():
