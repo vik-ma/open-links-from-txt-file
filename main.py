@@ -203,7 +203,7 @@ def get_browser_list() -> list:
         #Return the name of all browsers added in [BROWSER_PATHS] in config.ini
         return [option.title() for option in config['BROWSER_PATHS']]
 
-def draw_gui():
+def main():
     """Construct the GUI for the application."""
     root = tk.Tk()
     root.title("Open Links From Text File")
@@ -590,4 +590,5 @@ def draw_gui():
 
     root.mainloop()
     
-draw_gui()
+if __name__ == "__main__":
+    main()
