@@ -168,7 +168,7 @@ def strip_dashes_from_links(list) -> list:
     """
     Generate a modified list.
 
-    Take a list of list and return a list where index 0 has had '--' removed from it's end.
+    Take a list of list and return a list where index 0 has had '--' removed from its end.
     """
     filtered_list = []
     for line in list:
@@ -185,7 +185,7 @@ def add_browser_path():
     browsername = get_browsername[-1].split(".")    
     #Takes only the filename of the full path of the file and then splits it by the file extension (.)
     if filename != "":
-        #Writes the name of the file selected to [BROWSER_PATHS] in config.ini as well as it's full path
+        #Writes the name of the file selected to [BROWSER_PATHS] in config.ini as well as its full path
         config.set("BROWSER_PATHS", browsername[0], filename)
         write_config()
 
@@ -230,7 +230,7 @@ def main():
     selected_file_label.place(x=8, y=46)
 
     def select_file():
-        """Let user select text file from system and store it's path as a variable."""
+        """Let user select text file from system and store its path as a variable."""
         filename = filedialog.askopenfilename(initialdir=config.get("USERCONFIG", "defaultdir"), title="Select File", 
                                                     filetypes=[("Text Documents (*.txt)", "*.txt"), ("All Files", "*.*")])
         #If filedialog box gets cancelled, "" is returned
