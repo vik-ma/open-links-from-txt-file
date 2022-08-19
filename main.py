@@ -504,7 +504,7 @@ def main():
     change_warning.place(x=500, y=241)
     change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
     change_warning.config(state = "readonly")
-    set_warning_button = tk.Button(root, text="Change", command=lambda:[input_box_single_value("batch_warning")])
+    set_warning_button = tk.Button(root, text="Change", command=lambda:[show_input_box("batch_warning")])
     set_warning_button.place(x=542, y=238)
 
     #Show and allow user to change the delay between opening links
@@ -514,10 +514,10 @@ def main():
     change_delay.place(x=500, y=271)
     change_delay.insert(0, config.get("USERCONFIG", "delay"))
     change_delay.config(state = "readonly")
-    set_delay_button = tk.Button(root, text="Change", command=lambda:[input_box_single_value("delay")])
+    set_delay_button = tk.Button(root, text="Change", command=lambda:[show_input_box("delay")])
     set_delay_button.place(x=542, y=268)
 
-    def input_box_single_value(variable):
+    def show_input_box(variable):
         ask = askstring("Set Value", "Enter new value:")
         if ask != None:
             set_int_variable(variable, ask)
