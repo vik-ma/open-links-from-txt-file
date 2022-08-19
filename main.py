@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import BooleanVar, StringVar, filedialog, Text, messagebox, Label
+from tkinter.simpledialog import askstring
 import pathlib
 import os
 import webbrowser
@@ -510,8 +511,14 @@ def main():
     change_delay = tk.Entry(root, width=5)
     change_delay.place(x=500, y=271)
     change_delay.insert(0, config.get("USERCONFIG", "delay"))
-    set_delay_button = tk.Button(root, text="Change", command=lambda:[set_int_variable("delay", change_delay.get()), reset_variables()])
+    set_delay_button = tk.Button(root, text="Change", command=lambda:[input_box_single_value("delay")])
     set_delay_button.place(x=542, y=268)
+
+    def input_box_single_value(variable):
+        ask = askstring("Set Value", "Enter new value:")
+        if ask != None:
+            set_int_variable("delay", ask)
+            reset_variables()
 
     def restore_default_warning():
         """Overwrite all variables in config.ini under [USERCONFIG] with [DEFAULT] values if user clicks "Yes"."""
@@ -584,6 +591,12 @@ def main():
         else:
             set_str_variable("savedtxtpath", "No File Selected")
         root.destroy()
+    
+    def test():
+        pass
+
+    test_button = tk.Button(root, text="TEST", command=lambda:[test(delay)])
+    test_button.place(x=105, y=220)
 
     #Update checkboxes when closing application. Executes second command before calling root.destroy().
     root.protocol("WM_DELETE_WINDOW", lambda:[check_checkboxes()])
