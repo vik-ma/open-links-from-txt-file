@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import BooleanVar, StringVar, filedialog, Text, messagebox, Label
-from tkinter.simpledialog import askstring
+from tkinter.simpledialog import askstring, Dialog
 import pathlib
 import os
 import webbrowser
@@ -262,12 +262,16 @@ def main():
     set_phrase_filter = tk.Entry(root, width=20)
     set_phrase_filter.place(x=243, y=116)
     set_phrase_filter_button = tk.Button(root, text="Set", command=lambda:[apply_phrase_filter(set_phrase_filter.get())])
-    set_phrase_filter_button.place(x=373, y=113)  
+    set_phrase_filter_button.place(x=373, y=113) 
+    #Bind set_phrase_filter entry field to set_phrase_filter_button command when pressing enter
+    set_phrase_filter.bind('<Return>', (lambda event: apply_phrase_filter(set_phrase_filter.get()))) 
 
     set_domain_filter = tk.Entry(root, width=20)
     set_domain_filter.place(x=243, y=146)
     set_domain_filter_button = tk.Button(root, text="Set", command=lambda:[apply_domain_filter(set_domain_filter.get())])
     set_domain_filter_button.place(x=373, y=143)
+    #Bind set_domain_filter entry field to set_domain_filter_button command when pressing enter
+    set_domain_filter.bind('<Return>', (lambda event: apply_domain_filter(set_domain_filter.get())))
 
     set_line_filter_start = tk.Entry(root, width=5)
     set_line_filter_end = tk.Entry(root, width=5)
@@ -275,6 +279,11 @@ def main():
     set_line_filter_end.place(x=283, y=176)
     set_line_filter_button = tk.Button(root, text="Set", command=lambda:[apply_line_filter(set_line_filter_start.get(), set_line_filter_end.get())])
     set_line_filter_button.place(x=373, y=173)
+    #Bind set_line_filter_start entry field to focus set_line_filter_end when pressing enter
+    set_line_filter_start.bind('<Return>', (lambda event: set_line_filter_end.focus()))
+    #Bind set_line_filter_enter entry field to set_line_filter_button command when pressing enter
+    set_line_filter_end.bind('<Return>', (lambda event: apply_line_filter(set_line_filter_start.get(), set_line_filter_end.get())))
+
 
     def apply_phrase_filter(phrase):
         """Set the filter to only include lines which comments contain specific phrase."""
@@ -593,9 +602,9 @@ def main():
         root.destroy()
     
     def test():
-        pass
+        print("ADSdsadsadasasdadss")
 
-    test_button = tk.Button(root, text="TEST", command=lambda:[test(delay)])
+    test_button = tk.Button(root, text="TEST", command=lambda:[test()])
     test_button.place(x=105, y=220)
 
     #Update checkboxes when closing application. Executes second command before calling root.destroy().
