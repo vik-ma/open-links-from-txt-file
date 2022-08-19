@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import BooleanVar, StringVar, filedialog, Text, messagebox, Label
-from tkinter.simpledialog import askstring, Dialog
+from tkinter.simpledialog import askstring
 import pathlib
 import os
 import webbrowser
@@ -59,13 +59,6 @@ def restore_default_config():
     for k, v in default_config:
         config.set("USERCONFIG", k, v)
     write_config()
-
-def set_default_dir():
-    """Set the default directory when selecting text file and save value in config.ini."""
-    folder = filedialog.askdirectory(initialdir=config.get("USERCONFIG", "defaultdir"))
-    if folder != "":
-        config.set("USERCONFIG", "defaultdir", folder)
-        write_config()
 
 def set_int_variable(variable, value):
     """Check if integer value is valid and save value to corresponding variable in config.ini."""
@@ -501,7 +494,7 @@ def main():
     defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))
     defaultdir_label = tk.Label(root, textvariable=defaultdir_get)
     defaultdir_label.place(x=155, y=210)
-    set_defaultdir_button = tk.Button(root, text="Change", command=lambda:[set_default_dir(), reset_variables()])
+    set_defaultdir_button = tk.Button(root, text="Change", command=lambda:[set_default_dir()])
     set_defaultdir_button.place(x=542, y=208)
 
     #Show and allow user to change how many links can be opened without warning
@@ -530,6 +523,14 @@ def main():
             set_int_variable(variable, ask)
             reset_variables()
 
+    def set_default_dir():
+        """Set the default directory when selecting text file and save value in config.ini."""
+        folder = filedialog.askdirectory(initialdir=config.get("USERCONFIG", "defaultdir"))
+        if folder != "":
+            config.set("USERCONFIG", "defaultdir", folder)
+            write_config()
+            defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))       
+
     def restore_default_warning():
         """Overwrite all variables in config.ini under [USERCONFIG] with [DEFAULT] values if user clicks "Yes"."""
         ask = messagebox.askquestion("Restore Default Config", "Do you really want to reset to default configuration? \nThis can not be undone.")
@@ -547,7 +548,6 @@ def main():
     
     def reset_variables():
         """Update values of setting variables in GUI."""
-        defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))   
         #Remove readonly
         change_delay.config(state = tk.NORMAL)
         change_warning.config(state = tk.NORMAL)    
