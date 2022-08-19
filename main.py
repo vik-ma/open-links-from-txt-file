@@ -284,7 +284,6 @@ def main():
     #Bind set_line_filter_enter entry field to set_line_filter_button command when pressing enter
     set_line_filter_end.bind('<Return>', (lambda event: apply_line_filter(set_line_filter_start.get(), set_line_filter_end.get())))
 
-
     def apply_phrase_filter(phrase):
         """Set the filter to only include lines which comments contain specific phrase."""
         if phrase != "":
@@ -511,6 +510,7 @@ def main():
     change_warning = tk.Entry(root, width=5)
     change_warning.place(x=500, y=241)
     change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
+    change_warning.config(state = "readonly")
     set_warning_button = tk.Button(root, text="Change", command=lambda:[input_box_single_value("batch_warning")])
     set_warning_button.place(x=542, y=238)
 
@@ -520,6 +520,7 @@ def main():
     change_delay = tk.Entry(root, width=5)
     change_delay.place(x=500, y=271)
     change_delay.insert(0, config.get("USERCONFIG", "delay"))
+    change_delay.config(state = "readonly")
     set_delay_button = tk.Button(root, text="Change", command=lambda:[input_box_single_value("delay")])
     set_delay_button.place(x=542, y=268)
 
@@ -546,11 +547,18 @@ def main():
     
     def reset_variables():
         """Update values of setting variables in GUI."""
-        defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))        
+        defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))   
+        #Remove readonly
+        change_delay.config(state = tk.NORMAL)
+        change_warning.config(state = tk.NORMAL)    
+        #Update fields
         change_warning.delete(0, tk.END)
         change_delay.delete(0, tk.END)
         change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
         change_delay.insert(0, config.get("USERCONFIG", "delay"))
+        #Set readonly again
+        change_delay.config(state = "readonly")
+        change_warning.config(state = "readonly")
 
     #Checkbox to automatically close program after opening links
     close_check = tk.BooleanVar()
