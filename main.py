@@ -1,5 +1,6 @@
+from lib2to3.pgen2.token import OP
 import tkinter as tk
-from tkinter import BooleanVar, StringVar, filedialog, Text, messagebox, Label
+from tkinter import BooleanVar, StringVar, filedialog, messagebox, Label, Frame, Button, Entry, Checkbutton, OptionMenu
 from tkinter.simpledialog import askstring
 import pathlib
 import os
@@ -213,14 +214,14 @@ def main():
     root.resizable(width=False, height=False)
     
     #Lines separating sections of the GUI
-    select_file_frame = tk.Frame(height=207, width=410, highlightbackground="black", highlightthickness=1)
+    select_file_frame = Frame(height=207, width=410, highlightbackground="black", highlightthickness=1)
     select_file_frame.place(x=-1, y=-1)
-    settings_frame = tk.Frame(height=98, width=602, highlightbackground="black", highlightthickness=1)
+    settings_frame = Frame(height=98, width=602, highlightbackground="black", highlightthickness=1)
     settings_frame.place(x=-1, y=203)
 
     selected_file = StringVar()
     selected_file.set("No File Selected")
-    selected_file_label = tk.Label(root, textvariable=selected_file, fg="#166edb")
+    selected_file_label = Label(root, textvariable=selected_file, fg="#166edb")
     selected_file_label.place(x=8, y=46)
 
     def select_file():
@@ -234,43 +235,43 @@ def main():
                 open_file_in_default_editor(filename)
             selected_file.set(filename)
 
-    select_file_button = tk.Button(root, text="Select Text File", command=select_file, font="arial 13 bold", bg="#3599e6", fg="#1c1c1c")
+    select_file_button = Button(root, text="Select Text File", command=select_file, font="arial 13 bold", bg="#3599e6", fg="#1c1c1c")
     select_file_button.place(x=8, y=10)
 
-    select_filter_label = tk.Label(root, text="Filter:", font="arial 13 bold")
+    select_filter_label = Label(root, text="Filter:", font="arial 13 bold")
     select_filter_label.place(x=8, y=86)
 
     current_filter = StringVar()
     current_filter.set("Open All Lines In Document (No Filter Set)")
-    display_filter = tk.Label(root, textvariable=current_filter, fg="#166edb")
+    display_filter = Label(root, textvariable=current_filter, fg="#166edb")
     display_filter.place(x=60, y=88)
 
-    filter_phrase_label = tk.Label(root, text="Open all lines containing comment phrase:")
+    filter_phrase_label = Label(root, text="Open all lines containing comment phrase:")
     filter_phrase_label.place(x=8, y=115)
-    filter_domain_label = tk.Label(root, text="Open all lines containing URL:")
+    filter_domain_label = Label(root, text="Open all lines containing URL:")
     filter_domain_label.place(x=8, y=145)
-    filter_line_label = tk.Label(root, text="Open all lines in range (Start/End):")
+    filter_line_label = Label(root, text="Open all lines in range (Start/End):")
     filter_line_label.place(x=8, y=175)
 
-    set_phrase_filter = tk.Entry(root, width=20)
+    set_phrase_filter = Entry(root, width=20)
     set_phrase_filter.place(x=243, y=116)
-    set_phrase_filter_button = tk.Button(root, text="Set", command=lambda:[apply_phrase_filter(set_phrase_filter.get())])
+    set_phrase_filter_button = Button(root, text="Set", command=lambda:[apply_phrase_filter(set_phrase_filter.get())])
     set_phrase_filter_button.place(x=373, y=113) 
     #Bind set_phrase_filter entry field to set_phrase_filter_button command when pressing enter
     set_phrase_filter.bind('<Return>', (lambda event: apply_phrase_filter(set_phrase_filter.get()))) 
 
-    set_domain_filter = tk.Entry(root, width=20)
+    set_domain_filter = Entry(root, width=20)
     set_domain_filter.place(x=243, y=146)
-    set_domain_filter_button = tk.Button(root, text="Set", command=lambda:[apply_domain_filter(set_domain_filter.get())])
+    set_domain_filter_button = Button(root, text="Set", command=lambda:[apply_domain_filter(set_domain_filter.get())])
     set_domain_filter_button.place(x=373, y=143)
     #Bind set_domain_filter entry field to set_domain_filter_button command when pressing enter
     set_domain_filter.bind('<Return>', (lambda event: apply_domain_filter(set_domain_filter.get())))
 
-    set_line_filter_start = tk.Entry(root, width=5)
-    set_line_filter_end = tk.Entry(root, width=5)
+    set_line_filter_start = Entry(root, width=5)
+    set_line_filter_end = Entry(root, width=5)
     set_line_filter_start.place(x=243, y=176)
     set_line_filter_end.place(x=283, y=176)
-    set_line_filter_button = tk.Button(root, text="Set", command=lambda:[apply_line_filter(set_line_filter_start.get(), set_line_filter_end.get())])
+    set_line_filter_button = Button(root, text="Set", command=lambda:[apply_line_filter(set_line_filter_start.get(), set_line_filter_end.get())])
     set_line_filter_button.place(x=373, y=173)
     #Bind set_line_filter_start entry field to focus set_line_filter_end when pressing enter
     set_line_filter_start.bind('<Return>', (lambda event: set_line_filter_end.focus()))
@@ -304,7 +305,7 @@ def main():
     current_filter_type = StringVar()   #Determines which type of filter (Comment phrase, link phrase or index range)
     current_filter_value = StringVar()  #Stores the actual value to be filtered
 
-    reset_filter_button = tk.Button(root, text="Reset Filter", command=lambda:[reset_filter()])
+    reset_filter_button = Button(root, text="Reset Filter", command=lambda:[reset_filter()])
     reset_filter_button.place(x=332, y=83)
     
     def reset_filter():
@@ -325,7 +326,7 @@ def main():
         set_line_filter_end.delete(0, tk.END)
         set_line_filter_end.insert(0, "")
     
-    open_links_button = tk.Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#02f25a", fg="#242424", width=17)
+    open_links_button = Button(root, text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#02f25a", fg="#242424", width=17)
     open_links_button.place(x=415, y=8)
     
     def check_if_file_selected():
@@ -345,7 +346,7 @@ def main():
             #If the file cannot be read as a text file
             messagebox.showerror("Error", "Target file can not be read! Select a valid text file.")
 
-    browser_selection = tk.StringVar(root)
+    browser_selection = StringVar(root)
     browser_selection.set(get_browser_list()[0])
 
     def check_if_browser_added():
@@ -454,28 +455,28 @@ def main():
         delay = int(config.get("USERCONFIG", "delay"))/1000     #Converts milliseconds to seconds
         for link in link_list:
             webbrowser.get(browser).open_new_tab(link[0])
-            time.sleep(delay)       #Add delay between every link being opened
+            time.sleep(delay)       #Adds delay between every link being opened
         if close_check.get() is True:
             #Closes application after links have been opened if autoclose_checkbox has bebn ticked
             check_checkboxes()      #Saves any changes made to checkboxes before closing application
             #close()
 
     #Checkbox to open text file in default text editor if checked when selecting file
-    open_txt_check = tk.BooleanVar()
+    open_txt_check = BooleanVar()
     open_txt_check.set(config.get("USERCONFIG", "opentxtfile"))
-    open_txt_checkbox = tk.Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
+    open_txt_checkbox = Checkbutton(root, text="Also Open File In Default Text Editor", variable=open_txt_check, onvalue=True, offvalue=False)
     open_txt_checkbox.place(x=145, y=5)
 
     #Checkbox to automatically select same file next time application is opened
-    save_txt_check = tk.BooleanVar()
+    save_txt_check = BooleanVar()
     save_txt_check.set(config.get("USERCONFIG", "savetxt"))
-    save_txt_checkbox = tk.Checkbutton(root, text="Remember file next time program is opened", variable=save_txt_check, onvalue=True, offvalue=False)
+    save_txt_checkbox = Checkbutton(root, text="Remember file next time program is opened", variable=save_txt_check, onvalue=True, offvalue=False)
     save_txt_checkbox.place(x=145, y=25)
 
     #Checkbox to ignore opening links ending with '--' if checked
-    ignore_dash_check = tk.BooleanVar()
+    ignore_dash_check = BooleanVar()
     ignore_dash_check.set(config.get("USERCONFIG", "ignore_dashes"))
-    ignore_dash_checkbox = tk.Checkbutton(root, text="Don't open links ending with '--'", variable=ignore_dash_check, onvalue=True, offvalue=False)
+    ignore_dash_checkbox = Checkbutton(root, text="Don't open links ending with '--'", variable=ignore_dash_check, onvalue=True, offvalue=False)
     ignore_dash_checkbox.place(x=7, y=64)
 
     if save_txt_check.get() is True:
@@ -486,35 +487,35 @@ def main():
         """Show help window in GUI."""
         messagebox.showinfo("Help", "Add the path to the browser you want to use by clicking the 'Add Browser Path' button and then locate the .exe file of the browser on your system. You can add multiple browsers and the paths will be stored in the 'config.ini' file.\n\nSelect a text file to read from. The script will open the first entry of every line up until the first space or tab. Everything after the space is considered as a comment. Empty lines are not considered an entry.\n\nSet a filter only open specific lines in the text document.\n\nIf the script fails to execute, the added browser is not valid.")
 
-    help_button = tk.Button(root, text="Help", command=helpwindow, font="arial 13 bold")
+    help_button = Button(root, text="Help", command=helpwindow, font="arial 13 bold")
     help_button.place(x=10, y=212)
 
     #Show and allow user to change default directory where user selects text files
     defaultdir_get = StringVar()
     defaultdir_get.set("Default Directory: " + config.get("USERCONFIG", "defaultdir"))
-    defaultdir_label = tk.Label(root, textvariable=defaultdir_get)
+    defaultdir_label = Label(root, textvariable=defaultdir_get)
     defaultdir_label.place(x=155, y=210)
-    set_defaultdir_button = tk.Button(root, text="Change", command=lambda:[set_default_dir()])
+    set_defaultdir_button = Button(root, text="Change", command=lambda:[set_default_dir()])
     set_defaultdir_button.place(x=542, y=208)
 
     #Show and allow user to change how many links can be opened without warning
-    warning_label = tk.Label(root, text="Warn before opening X amount of links (0 = No warning):")
+    warning_label = Label(root, text="Warn before opening X amount of links (0 = No warning):")
     warning_label.place(x=155, y=240)
-    change_warning = tk.Entry(root, width=5)
+    change_warning = Entry(root, width=5)
     change_warning.place(x=500, y=241)
     change_warning.insert(0, config.get("USERCONFIG", "batch_warning"))
     change_warning.config(state = "readonly")
-    set_warning_button = tk.Button(root, text="Change", command=lambda:[show_input_box("batch_warning")])
+    set_warning_button = Button(root, text="Change", command=lambda:[show_input_box("batch_warning")])
     set_warning_button.place(x=542, y=238)
 
     #Show and allow user to change the delay between opening links
-    delay_label = tk.Label(root, text="Delay between opening links (In milliseconds):")
+    delay_label = Label(root, text="Delay between opening links (In milliseconds):")
     delay_label.place(x=155, y=270)
-    change_delay = tk.Entry(root, width=5)
+    change_delay = Entry(root, width=5)
     change_delay.place(x=500, y=271)
     change_delay.insert(0, config.get("USERCONFIG", "delay"))
     change_delay.config(state = "readonly")
-    set_delay_button = tk.Button(root, text="Change", command=lambda:[show_input_box("delay")])
+    set_delay_button = Button(root, text="Change", command=lambda:[show_input_box("delay")])
     set_delay_button.place(x=542, y=268)
 
     def show_input_box(variable):
@@ -543,7 +544,7 @@ def main():
             save_txt_check.set(config.get("USERCONFIG", "savetxt"))
             ignore_dash_check.set(config.get("USERCONFIG", "ignore_dashes"))
 
-    restore_default_button = tk.Button(root, text="Restore Default Settings", command=restore_default_warning)
+    restore_default_button = Button(root, text="Restore Default Settings", command=restore_default_warning)
     restore_default_button.place(x=10, y=265)
     
     def reset_variables():
@@ -561,9 +562,9 @@ def main():
         change_warning.config(state = "readonly")
 
     #Checkbox to automatically close program after opening links
-    close_check = tk.BooleanVar()
+    close_check = BooleanVar()
     close_check.set(config.get("USERCONFIG", "autoclose"))
-    autoclose_checkbox = tk.Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
+    autoclose_checkbox = Checkbutton(root, text="Close Program After Opening", variable=close_check, onvalue=True, offvalue=False)
     autoclose_checkbox.place(x=412, y=42)
 
     def check_checkboxes(): 
@@ -578,17 +579,17 @@ def main():
             set_str_variable("ignore_dashes", ignore_dash_check.get())
         close()
 
-    browser_label = tk.Label(root, text="Open In Browser:", font="arial 13 bold")
+    browser_label = Label(root, text="Open In Browser:", font="arial 13 bold")
     browser_label.place(x=415, y=75)
 
-    browser_menu = tk.OptionMenu(root, browser_selection, *get_browser_list())
+    browser_menu = OptionMenu(root, browser_selection, *get_browser_list())
     browser_menu.configure(font="arial 11 bold")
     browser_menu.place(x=413, y=100)
     
-    add_browser_button = tk.Button(root, text="Add Browser Path", command=lambda:[add_browser_path(), reset_browser_menu()])
+    add_browser_button = Button(root, text="Add Browser Path", command=lambda:[add_browser_path(), reset_browser_menu()])
     add_browser_button.place(x=415, y=143)
 
-    del_browser_button = tk.Button(root, text="Remove Browser Path", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
+    del_browser_button = Button(root, text="Remove Browser Path", command=lambda:[remove_browser(browser_selection.get()), reset_browser_menu()])
     del_browser_button.place(x=415, y=173)
 
     def reset_browser_menu():
@@ -612,7 +613,7 @@ def main():
     def test():
         print("ADSdsadsadasasdadss")
 
-    test_button = tk.Button(root, text="TEST", command=lambda:[test()])
+    test_button = Button(root, text="TEST", command=lambda:[test()])
     test_button.place(x=105, y=220)
 
     #Update checkboxes when closing application. Executes second command before calling root.destroy().
