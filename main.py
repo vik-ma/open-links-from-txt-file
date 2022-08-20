@@ -608,12 +608,6 @@ def main():
         else:
             set_str_variable("savedtxtpath", "No File Selected")
         root.destroy()
-    
-    def test():
-        print("ADSdsadsadasasdadss")
-
-    test_button = Button(text="TEST", command=lambda:[test()])
-    test_button.place(x=105, y=220)
 
     #Update checkboxes when closing application. Executes second command before calling root.destroy().
     root.protocol("WM_DELETE_WINDOW", lambda:[check_checkboxes()])
