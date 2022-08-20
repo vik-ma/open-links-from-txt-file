@@ -517,6 +517,7 @@ def main():
     set_delay_button.place(x=542, y=268)
 
     def show_input_box(variable):
+        """Set value for specified config variable based on user input."""
         ask = askstring("Set Value", "Enter new value:")
         if ask != None:
             set_int_variable(variable, ask)
@@ -546,7 +547,7 @@ def main():
     restore_default_button.place(x=10, y=265)
     
     def reset_variables():
-        """Update values of setting variables in GUI."""
+        """Update values of config variables in GUI."""
         #Remove readonly
         change_delay.config(state = tk.NORMAL)
         change_warning.config(state = tk.NORMAL)    
