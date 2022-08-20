@@ -80,7 +80,6 @@ def read_file(target_file) -> list:
     Index 0 stores the URL as a string
     Index 1 stores the comment (if there is one) next to the URL as a string
     """
-
     formatted_list = []
     with open (target_file, "r") as file:
         file_contents = file.readlines()
@@ -88,7 +87,8 @@ def read_file(target_file) -> list:
             f = f.strip()
             f = f.lower()
             line_contents = f.split(None,1)
-            if len(line_contents) > 1:            # Replaces "\t" with spaces in the comment (if there is a comment)
+            if len(line_contents) > 1:
+                #Replaces "\t" with spaces in the comment (if there is a comment)        
                 x = line_contents[1].split("\t")    
                 x = " ".join(x)
                 line_contents[1] = x
@@ -106,7 +106,7 @@ def filter_by_phrase(list, phrase) -> list:
     filtered_list = []
     for line in list:
         if len(line) == 2:
-        #Skips if no comment (Index 1 represents the comment)
+            #Skips if no comment (Index 1 represents the comment)
             if phrase in line[1]:
                 filtered_list.append(line)
     return filtered_list
@@ -122,7 +122,7 @@ def filter_by_domain(list, phrase) -> list:
     filtered_list = []
     for line in list:
         if len(line) > 0:
-        #Skips empty lines
+            #Skips empty lines
             if phrase in line[0]:
                 filtered_list.append(line)
     return filtered_list
@@ -147,7 +147,7 @@ def filter_ignored_links(list) -> list:
     filtered_list = []
     for line in list:
         if line[0][-2::] != "--":
-        #Checks if the last two characters of the domain are not '--'
+            #Checks if the last two characters of the domain are not '--'
             filtered_list.append(line)
     return filtered_list
 
@@ -291,11 +291,14 @@ def main():
         if start != "" and end != "":
             current_filter.set(f"Open everything from line {start} to line {end}")
             current_filter_type.set("Lines")
-            current_filter_value.set(str(start)+","+str(end))   #"," is used as a delimiter
+            #Use "," as a delimiter between start value and end value
+            current_filter_value.set(str(start)+","+str(end))   
             clear_filter_entries()
 
-    current_filter_type = StringVar()   #Determines which type of filter (Comment phrase, link phrase or index range)
-    current_filter_value = StringVar()  #Stores the actual value to be filtered
+    #Determines which type of filter (Comment phrase, link phrase or index range)
+    current_filter_type = StringVar()  
+    #Stores the actual value to be filtered 
+    current_filter_value = StringVar()  
 
     reset_filter_button = Button(text="Reset Filter", command=lambda:[reset_filter()])
     reset_filter_button.place(x=332, y=83)
@@ -392,7 +395,8 @@ def main():
                         messagebox.showerror("Error", e)
                 case "Lines":
                     #Filter to include only lines in specific index range
-                    line_index = filtervalue.split(",")     #Start and end value is split by "," delimiter
+                    #Start and end value is split by "," delimiter
+                    line_index = filtervalue.split(",")
                     error_msg = "Range values must be valid line numbers in file!"
                     try:
                         if int(line_index[0]) > int(line_index[1]):
@@ -444,14 +448,16 @@ def main():
         Close application if autoclose_checkbox has been ticked.
         """
         browser = config.get("BROWSER_PATHS", browser_selection.get()) + " %s"
-        delay = int(config.get("USERCONFIG", "delay"))/1000     #Converts milliseconds to seconds
+        #Converts milliseconds to seconds
+        delay = int(config.get("USERCONFIG", "delay"))/1000     
         for link in link_list:
             webbrowser.get(browser).open_new_tab(link[0])
-            time.sleep(delay)       #Adds delay between every link being opened
+            #Adds delay between every link being opened
+            time.sleep(delay)       
         if close_check.get() is True:
-            #Closes application after links have been opened if autoclose_checkbox has bebn ticked
-            check_checkboxes()      #Saves any changes made to checkboxes before closing application
-            #close()
+            #Closes application after links have been opened if autoclose_checkbox has been ticked
+            #Saves any changes made to checkboxes before closing application
+            check_checkboxes()      
 
     #Checkbox to open text file in default text editor if checked when selecting file
     open_txt_check = BooleanVar()
