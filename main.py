@@ -8,18 +8,11 @@ import time
 from configparser import ConfigParser
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
-
-batch_warning = 20                          #Warns when trying to open more than that many links
-delay = 250                                 #Delay between opening links in milliseconds
-defaultdir = DESKTOP                        #Default directory when selecting file
-autoclose = False                           #Closes program after opening links if True
-opentxtfile = False                         #Opens text file in default text editor if True
-savetxt = False                             #Automatically selects saved file on startup if True
-savedtxtpath = "No File Selected"           #Filepath to the file to be automatically selected
-ignore_dashes = True                        #Ignores opening links ending with '--' if True
-
-config = ConfigParser(default_section=None)         #Stops [DEFAULT] in config.ini from being overwritten
-has_config = pathlib.Path("config.ini").exists()    #Checks if config.ini file exits in same directory
+                    
+#Stops [DEFAULT] in config.ini from being overwritten
+config = ConfigParser(default_section=None)
+#Checks if config.ini file exits in same directory       
+has_config = pathlib.Path("config.ini").exists()    
 
 def write_config():
     """Write changed values to config.ini."""
@@ -27,29 +20,29 @@ def write_config():
         config.write(configfile)
 
 if has_config:
-    #Changes variables to saved settings in config.ini
+    #Reads config.ini if it exists
     config.read("config.ini")
-    batch_warning = config.get("USERCONFIG", "batch_warning")
-    delay = config.get("USERCONFIG", "delay")
-    defaultdir = config.get("USERCONFIG", "defaultdir") 
-    autoclose = config.get("USERCONFIG", "autoclose")
-    opentxtfile = config.get("USERCONFIG", "opentxtfile")
-    savetxt = config.get("USERCONFIG", "savetxt")
-    savedtxtpath = config.get("USERCONFIG", "savedtxtpath")
-    ignore_dashes = config.get("USERCONFIG", "ignore_dashes")
 else:
     #Creates default config.ini if it doesn't exist
     config.add_section("DEFAULT")
     config.add_section("USERCONFIG")
     for section in config.sections():
-        config.set(section, "batch_warning", str(batch_warning))
-        config.set(section, "delay", str(delay))
+        #Warns when trying to open more than that many links
+        config.set(section, "batch_warning", "20")
+        #Delay between opening links in milliseconds
+        config.set(section, "delay", "250")
+        #Default directory when selecting file
         config.set(section, "defaultdir", str(DESKTOP))
-        config.set(section, "autoclose", str(autoclose))
-        config.set(section, "opentxtfile", str(opentxtfile))
-        config.set(section, "savetxt", str(savetxt))
-        config.set(section, "savedtxtpath", savedtxtpath)
-        config.set(section, "ignore_dashes", str(ignore_dashes))
+        #Closes program after opening links if True
+        config.set(section, "autoclose", "False")
+        #Opens text file in default text editor if True
+        config.set(section, "opentxtfile", "False")
+        #Automatically selects saved file on startup if True
+        config.set(section, "savetxt", "False")
+        #Filepath to the file to be automatically selected
+        config.set(section, "savedtxtpath", "No File Selected")
+        #Ignores opening links ending with '--' if True
+        config.set(section, "ignore_dashes", "True")
     config.add_section("BROWSER_PATHS")
     write_config()
 
