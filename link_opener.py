@@ -609,7 +609,7 @@ def main():
             set_str_variable("savedtxtpath", "No File Selected")
         root.destroy()
 
-    #Update checkboxes when closing application. Executes second command before calling root.destroy().
+    #Update checkboxes before closing application.
     root.protocol("WM_DELETE_WINDOW", lambda:[check_checkboxes()])
 
     root.mainloop()
