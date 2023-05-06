@@ -193,6 +193,7 @@ def get_browser_list() -> list:
 def main():
     """Construct the GUI for the application."""
     root = tk.Tk()
+    root.iconphoto(False, tk.PhotoImage(file="link_opener-icon.png"))
     root.title("Open Links From Text File")
 
     #Create 600x300 unresizable GUI roughly in the middle of the screen (60px north of center)
