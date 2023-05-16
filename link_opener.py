@@ -214,7 +214,7 @@ def main():
 
     selected_file = StringVar()
     selected_file.set("No File Selected")
-    selected_file_label = Label(textvariable=selected_file, fg="#166edb")
+    selected_file_label = Label(textvariable=selected_file, fg="#0066ff")
     selected_file_label.place(x=8, y=46)
 
     def select_file():
@@ -228,7 +228,7 @@ def main():
                 open_file_in_default_editor(filename)
             selected_file.set(filename)
 
-    select_file_button = Button(text="Select Text File", command=select_file, font="arial 13 bold", bg="#3599e6", fg="#1c1c1c")
+    select_file_button = Button(text="Select Text File", command=select_file, font="arial 13 bold", bg="#1b76ff", fg="#f7f7f7")
     select_file_button.place(x=8, y=10)
 
     select_filter_label = Label(text="Filter:", font="arial 13 bold")
@@ -236,7 +236,7 @@ def main():
 
     current_filter = StringVar()
     current_filter.set("Open All Lines In Document (No Filter Set)")
-    display_filter = Label(textvariable=current_filter, fg="#166edb")
+    display_filter = Label(textvariable=current_filter, fg="#0066ff")
     display_filter.place(x=60, y=88)
 
     filter_phrase_label = Label(text="Open all lines containing comment phrase:")
@@ -322,7 +322,7 @@ def main():
         set_line_filter_end.delete(0, tk.END)
         set_line_filter_end.insert(0, "")
     
-    open_links_button = Button(text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#02f25a", fg="#242424", width=17)
+    open_links_button = Button(text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#04e92a", fg="#fdfdfd", width=17)
     open_links_button.place(x=415, y=8)
     
     def check_if_file_selected():
