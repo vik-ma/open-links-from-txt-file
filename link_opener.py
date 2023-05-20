@@ -322,7 +322,7 @@ def main():
         set_line_filter_end.delete(0, tk.END)
         set_line_filter_end.insert(0, "")
     
-    open_links_button = Button(text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#04e92a", fg="#fdfdfd", width=17)
+    open_links_button = Button(text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#3fe747", fg="#ffffff", width=17)
     open_links_button.place(x=415, y=8)
     
     def check_if_file_selected():
