@@ -196,7 +196,7 @@ def main():
     root = tk.Tk()
     root.title("Open Links From Text File")
 
-    # Add Icon to window if it file exists
+    # Add Icon to Window if Icon file exists
     if os.path.exists(ICON_FILE_NAME):
         root.iconphoto(False, tk.PhotoImage(file=ICON_FILE_NAME))
 
