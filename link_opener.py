@@ -8,6 +8,7 @@ import time
 from configparser import ConfigParser
 
 DESKTOP = pathlib.Path.home() / 'Desktop'
+ICON_FILE_NAME = "link_opener-icon.png"
                     
 #Stops [DEFAULT] in config.ini from being overwritten
 config = ConfigParser(default_section=None)
@@ -193,8 +194,11 @@ def get_browser_list() -> list:
 def main():
     """Construct the GUI for the application."""
     root = tk.Tk()
-    root.iconphoto(False, tk.PhotoImage(file="link_opener-icon.png"))
     root.title("Open Links From Text File")
+
+    # Add Icon to window if it file exists
+    if os.path.exists(ICON_FILE_NAME):
+        root.iconphoto(False, tk.PhotoImage(file=ICON_FILE_NAME))
 
     #Create 600x300 unresizable GUI roughly in the middle of the screen (60px north of center)
     w = 600
