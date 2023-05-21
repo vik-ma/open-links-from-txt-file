@@ -232,7 +232,7 @@ def main():
                 open_file_in_default_editor(filename)
             selected_file.set(filename)
 
-    select_file_button = Button(text="Select Text File", command=select_file, font="arial 13 bold", bg="#1b76ff", fg="#f7f7f7")
+    select_file_button = Button(text="Select Text File", command=select_file, font="arial 13 bold", bg="#1b76ff", fg="#fefefe")
     select_file_button.place(x=8, y=10)
 
     select_filter_label = Label(text="Filter:", font="arial 13 bold")
@@ -326,7 +326,7 @@ def main():
         set_line_filter_end.delete(0, tk.END)
         set_line_filter_end.insert(0, "")
     
-    open_links_button = Button(text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#3fe747", fg="#ffffff", width=17)
+    open_links_button = Button(text="Open Links", command=lambda:[check_if_file_selected()], font="arial 13 bold", bg="#3eda46", fg="#fefefe", width=17)
     open_links_button.place(x=415, y=8)
     
     def check_if_file_selected():

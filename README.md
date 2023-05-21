@@ -25,7 +25,7 @@ This application also allows you to:
 - Only one URL per line
 - Comment placed next to an URL needs to be separated by a space or a tab
 - Everything after the first space or tab is considered as a comment
-- To ignore a line, add '--' to the end of the URL before any space<br>
+- To ignore a line, add '--' to the end of the URL before any space or tab<br>
   For example: *ht<span>tps://www.google.com/--* <br>
   *This also works to ignore any text, as long as there is no space or tab before the '--'*
 - Empty lines will get skipped
@@ -34,7 +34,7 @@ This application also allows you to:
 1. Click on **'Add Browser Path'** and select the .exe of the browser you wish to open the links in. <br>
 You can add multiple browsers and switch between them.
 2. Click on **'Select Text File'** to select the .txt file containing the links.
-3. Type in the specific filter you wish to set and then click on **'Set'** next to the input field. <br>
+3. Type in the specific filter you wish to set and then click on **'Set'** next to its input field. <br>
 (Only one filter can be set at a time)
 4. Click on **'Open Links'** to open your links.
 ## Saved Configuration
