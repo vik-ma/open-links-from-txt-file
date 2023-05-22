@@ -4,6 +4,8 @@
 
 The application was made with Python and Tkinter, and requires Python to run.
 
+![Preview Picture](link-opener-preview.jpg)
+
 ## Features
 
 This application also allows you to:
@@ -39,4 +41,4 @@ You can add multiple browsers and switch between them.
 4. Click on **'Open Links'** to open your links.
 ## Saved Configuration
 
-User configuration is stored in a 'config.ini' file that gets automatically created in the same directory as the 'link_opener.py' file when it's run for the first time.
+User configuration is stored in a *'config.ini'* file that gets automatically created in the same directory as the *'link_opener.py'* file when it's run for the first time.
