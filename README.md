@@ -4,7 +4,7 @@
 
 The application was made with Python and Tkinter, and requires Python to run.
 
-![Preview Picture](link-opener-preview.jpg)
+![Preview Picture](link-opener-preview.png)
 
 ## Features
 
