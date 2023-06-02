@@ -28,7 +28,7 @@ This application also allows you to:
 - Comment placed next to an URL needs to be separated by a space or a tab
 - Everything after the first space or tab is considered as a comment
 - To ignore a line, add '--' to the end of the URL before any space or tab<br>
-  For example: *ht<span>tps://www.google.com/--* <br>
+  For example: *ht<span>tps://w<span>ww.google.com/--* <br>
   *This also works to ignore any text, as long as there is no space or tab before the '--'*
 - Empty lines will get skipped
 
